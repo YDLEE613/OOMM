@@ -22,9 +22,9 @@
             UserDAL lUserDAL = new UserDAL();
 
             // Insert into Database using UserDAL
-            int oResult = lUserDAL.CreateUser(iNewUser);
-
-            return oResult;
+            int lResult = lUserDAL.CreateUser(iNewUser);
+            
+            return lResult;
         }
         /// <summary>
         /// Description: This method calls a method in DAL layer to retrieve all users frmo database
