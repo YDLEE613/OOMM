@@ -1,0 +1,249 @@
+﻿@using BootcampTraineeDBObjects.Util
+@using BootcampTraineeDBObjects;
+
+@model MeaningfulCalcUtil
+
+<head>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('.row-offcanvas').toggleClass('active')
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid" style="margin-top:30px">
+        <div class="row row-offcanvas row-offcanvas-right">
+            <div class="col-sm-9 col-sm-push-3">
+
+                <button type="button" class="pull-left btn btn-default visible-xs" data-toggle="offcanvas" aria-expanded="false" aria-controls="navbar">
+                    <i class="glyphicon glyphicon-list"></i>
+                </button>
+
+                <div class="row">
+                    <!--For restaurant payment each week-->
+                    @for (int wIndex = Model.WeeklyTotal.GetLength(0)-1; wIndex >= 0; wIndex--)
+                    {
+                        <!-- each week with chart and total for every restaurant -->
+                        <div id="@("total"+@wIndex)" style="margin-top:30px;">
+                            @{
+                                // sum up costs from each restaurant in a week
+                                decimal total = 0;
+
+                                //week start and end date
+                                <h3 style="text-align:center;">
+                                    <strong id="@("weeks"+@wIndex)"> @Model.WeekList[wIndex][0].ToShortDateString() ~ @Model.WeekList[wIndex][1].ToShortDateString()</strong>
+                                </h3>
+                                <br />
+
+                                // Canvas for chart.js
+                                <div>
+                                    <canvas id="@("bar-chart"+@wIndex)" width="100" height="50"></canvas>
+                                </div>
+
+                                // Restaurant with weely payment
+                                <table class="table col-sm-offset-1" style="width:30%; margin: 0 auto 0 auto;">
+                                    @for (int rIndex = 0; rIndex < Model.WeeklyTotal.GetLength(1); rIndex++)
+                                    {
+                                        // sum up total
+                                        total = total + Convert.ToDecimal(@Model.WeeklyTotal[wIndex, rIndex]);
+
+                                        // Restaurant name and cost
+                                        <tr>
+                                            <th>
+                                                <strong id="@("restaurant-name"+@rIndex)">
+                                                    @Html.ActionLink((string)@Model.RestaurantList[rIndex].RestaurantName, "RestaurantProfile", "Restaurant", new { id = @Model.RestaurantList[rIndex].RestaurantIDPK }, new { @style = "color:black" })
+                                                </strong>
+                                            </th>
+                                            <td> <span id="@("tot"+@wIndex+"rest"+@rIndex)"> $@Model.WeeklyTotal[wIndex, rIndex] </span></td>
+                                          
+                                        </tr>
+
+                                        // Add total at the last row of table
+                                        if (rIndex == Model.WeeklyTotal.GetLength(1) - 1)
+                                        {
+                                            <tr style="background-color: aquamarine">
+                                                <th><strong>Total</strong></th>
+                                                <th colspan="3"><strong>$@total</strong></th>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            }
+                        </div>
+                        <hr />
+                    }
+                    <!-- Go to top button-->
+                    <a href="#" style="display:none;" class="scrollToTop btn btn-info btn-sm"><img src="~/Images/tiny-arrow-top-double-512.png" width="20" height="20"  /></a>
+                </div>
+            </div>
+
+            <!-- side bar-->
+            <div class="col-sm-3 col-sm-pull-9 sidebar-offcanvas" id="sidebar">
+                <div class="list-group">
+                    <a href="#" class="list-group-item active">Choose week</a>
+
+                    <!-- start and end date for every week -->
+                    @for (int wIndex = @Model.WeekList.Count-1; wIndex >= 0; wIndex--)
+                    {
+                        // each week
+                        DateTime[] each = @Model.WeekList[wIndex];
+                        <a href="#@("total"+wIndex)" class="list-group-item" style="color:black;">
+                            @each[0].ToShortDateString() ~ @each[1].ToShortDateString()
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Chart JS-->
+<script>
+    $(function () {
+        var visible = false;
+
+        // scroll to top button
+        $(window).scroll(function () {
+            var scrollTop = $(this).scrollTop();
+
+            if (!visible && scrollTop > 100) {
+                $(".scrollToTop").fadeIn();
+                visible = true;
+            } else if (visible && scrollTop <= 100) {
+                $(".scrollToTop").fadeOut();
+                visible = false;
+            }
+        });
+
+        // draw chart on page load
+        canvasChart();
+    })
+    // generate as many random colors as number of active restaurants in format of rgba(XXX,XXX,XXX, opacity) 
+    // where XXX is 3-digit number for color
+    function generateRandomColors(restaurantCounts) {
+        var colors = [];
+
+        for (var count = 0; count < restaurantCounts; count++) {
+
+            // random color generation for number of restaurants
+            var color = "rgba(";
+            for (var index = 0; index < 3; index++) {
+                var ranNum = Math.floor((Math.random() * 255));
+                if (index != 2) {
+                    color += ranNum + ",";
+                } else {
+                    color += ranNum + ", 0.7)";
+                }
+            }
+
+            // add to array
+            colors.push(color);
+        }
+
+        return colors;
+    }
+
+    function getRestaurantNames(restaurantCounts) {
+        var restaurants = [];
+
+        // add restaurant name with total to array
+        for (var count = 0; count < restaurantCounts; count++) {
+             restaurants.push(document.getElementById('restaurant-name' + count).innerText);
+        }
+
+        return restaurants;
+    }
+
+    // Convert 2D array [wIndex, rIndex] into 1D array [wIndex * rIndex]
+    function getWeeklyTotal(weekCounts, restaurantCounts) {
+        var weeklyTotal = [];
+
+        // get all weekly total as js array
+        for (var wIndex = 0; wIndex < weekCounts; wIndex++) {
+            for (var rIndex = 0; rIndex < restaurantCounts; rIndex++) {
+
+                // total for each restaurant
+                var totalTemp = document.getElementById('tot' + wIndex + 'rest' + rIndex).innerText;
+
+                // exclude $ sign
+                weeklyTotal.push(totalTemp.substring(1, totalTemp.length - 1));
+            }
+        }
+
+        return weeklyTotal;
+    }
+
+    // draw bar chart based on weekly total for every restaurant
+    function canvasChart() {
+
+        // number of restaurants
+        var restaurantCounts = @Model.RestaurantList.Count;
+
+        // number of weeks
+        var weekCounts = @Model.WeekList.Count;
+
+        // array of restaurant names
+        var restaurants = getRestaurantNames(restaurantCounts);
+
+        // array of colors
+        var colors = generateRandomColors(restaurantCounts);
+
+        // array of weekly total
+        var weeklyTotal = getWeeklyTotal(weekCounts, restaurantCounts);
+
+        // draw bar chart for every week
+        for (var count = 0; count < @Model.WeekList.Count; count++) {
+            // index for data IF number of restaurants is 5, where index is n-th week. 
+            //0 (index) -> 0, 1, 2, 3, 4        // index * NumRestaurant ~ (index+1) * NumRestaurant
+            //1 (index) -> 5, 6, 7, 8, 9        // index * NumRestaurant ~ (index+1) * NumRestaurant
+            //2 (index) -> 10, 11, 12, 13, 14   // index * NumRestaurant ~ (index+1) * NumRestaurant
+
+            // init a chart for every week
+            var chartCanvas = document.getElementById('bar-chart' + count);
+            var chart = new Chart(chartCanvas, {
+                type: 'bar',
+                data: {
+                    labels: restaurants,
+                    datasets: [{
+                        label: "Weekly Payment",
+                        backgroundColor: colors,
+                        data: weeklyTotal.slice(count * restaurantCounts, (count + 1) * restaurantCounts)
+                    }],
+                    borderWidth: 8
+                },
+                options: {
+                    fill: false,
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            barPercentage: 0.8,
+                            barThickness: 100,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Restaurants'
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Cost ($)'
+                            },
+                            ticks: {
+                                beginAtZero:true // starts from 0
+                            }
+                        }]
+                    },
+                    legend: { display: false }, // no legend
+                    title: {
+                        display: true,
+                        text: 'Weekly Lunch Cost For Restaurants'
+                    }
+                }
+            });
+
+        }
+    }
+</script>

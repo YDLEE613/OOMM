@@ -1,0 +1,24 @@
+﻿@model string[]
+
+@{
+    ViewBag.Title = "OrderConfirm";
+}
+
+<h2>Order Confirmation</h2>
+
+<!-- Show user what user ordered -->
+<div class="">
+
+
+    <h2>You ordered</h2>
+    <ul>
+        @for (int index = 0; index < Model.Length; index++)
+        {
+            <li>@Model[index]</li>
+        }
+    </ul>
+    <h3>Enjoy!</h3>
+    @Html.ActionLink("Main", "Index", "Restaurant", null, new { @class = "btn btn-primary" })
+</div>
+
+

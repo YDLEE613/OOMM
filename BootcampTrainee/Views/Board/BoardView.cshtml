@@ -1,0 +1,297 @@
+﻿@using BootcampTrainee.Models
+
+@model BoardAndCommentsViewModel
+
+@{
+    // Roles that can remove any posts
+    List<string> AUTHRoles = new List<string>() { "Admin", "Manager" };
+
+    // current user role and id
+    string CurrRole = Session["AUTHRole"] as string;
+    int CurrUserIDPK = Convert.ToInt32(Session["AUTHUserIDPK"]);
+
+    // message if any
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"]);
+    }
+
+}
+
+
+<head>
+    <!-- For Text Editor-->
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/ckeditor/config.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+
+    <!-- for modal -->
+    <link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        $(function () {
+            // ajax call for comment update
+            $(".comment-update").click(function () {
+
+                var $buttonClicked = $(this);
+                var commentID = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "false", show: true, keyboard: true }
+
+                $.ajax({
+                    type: "GET",
+                    url: "/BoardComment/BoardCommentUpdate",
+                    data: { iBoardCommentID: commentID },
+                    dataType: "html", // to remove error unexpected token < in Json
+                    success: function (data) {
+                        $('#myCommentUpdateModalContent').html(data);
+                        $('#myCommentUpdateModal').modal(options);
+                        $('#mycommentUpdateModal').modal('show');
+                        $('.modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+
+                        // refresh page on success
+                        if (data.success == true) {
+                            location.reload();
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "error:" + error)
+                    }
+
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- Comment Update Modal -->
+    <div id="myCommentUpdateModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content" style="text-align:center;">
+                <div id="myCommentUpdateModalContent">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <!-- container -->
+    <div class="container form-horizontal">
+
+        <!-- Post -->
+        <!-- Title and date-->
+        <div class="row row-board-view">
+            <div class="col col-md-1 col-md-offset-1">
+                @Html.LabelFor(Model => Model.Board.Title)
+            </div>
+            <div class="col col-md-10">
+                @Model.Board.Title
+            </div>
+        </div>
+
+        <!-- Author-->
+        <div class="row row-board-view">
+            <div class="col col-md-1 col-md-offset-1">
+                @Html.LabelFor(@Model => Model.Board.UserName)
+            </div>
+            <div class="col col-md-10">
+
+                <!-- if the role of current user is either Admin or Manager, enables redirection to the author's profile-->
+                @if (AUTHRoles.Contains(CurrRole))
+                {
+                    @Html.ActionLink(Model.Board.UserName, "UserProfile", "User", new { @id = Model.Board.UserIDFK }, new { @style = "color:black; font-weight:bold;" })
+                    <span>(@Model.Board.UserRoleName)</span>
+                }
+                else
+                {
+                    <span>@Model.Board.UserName (@Model.Board.UserRoleName)</span>
+                }
+            </div>
+        </div>
+
+        <!-- Date -->
+        <div class="row row-board-view">
+            <div class="col col-md-1 col-md-offset-1">
+                @Html.LabelFor(@Model => Model.Board.DateModified)
+            </div>
+            <div class="col col-md-10">
+                @Model.Board.DateModified
+            </div>
+        </div>
+
+        <!-- Category -->
+        <div class="row row-board-view">
+            <div class="col col-md-1 col-md-offset-1">
+                @Html.LabelFor(@Model => Model.Board.CategoryName)
+            </div>
+            <div class="col col-md-10">
+                @Model.Board.CategoryName.ToUpper()
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="row row-board-view">
+            <div class="col col-md-1 col-md-offset-1">
+                @Html.LabelFor(@Model => Model.Board.Content)
+            </div>
+            <div class="col col-md-9">
+                @Html.TextAreaFor(@Model => Model.Board.Content, new { @class = "form-control", @type = "text-area", @id = "boardContent" })
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row row-board-view">
+
+            <!-- Update -->
+            <div class="col-sm-offset-5">
+                <!-- Check if user id (primary key) matches. -->
+                <!-- Show the Update button only to the user with same UserIDPK as author's-->
+                @if (Model.Board.UserIDFK == CurrUserIDPK)
+                {
+                    @Html.ActionLink("Update", "BoardUpdate", new { @id = Model.Board.BoardIDPK }, new { @class = "btn btn-primary btn-sm" })
+                }
+
+                <!-- check if user id (primary key) matches. -->
+                <!-- show the remove button to user with same id and admin/manager-->
+                @if (Model.Board.UserIDFK == CurrUserIDPK || AUTHRoles.Contains(CurrRole))
+                {
+                    @Html.ActionLink("Remove", "BoardRemove", new { @id = Model.Board.BoardIDPK }, new { @class = "btn btn-danger btn-sm" })
+                }
+                <!-- button to list-->
+                @Html.ActionLink("Back to List", "BoardList", new { }, new { @class = "btn btn-warning btn-sm" })
+            </div>
+            <br />
+            <div class="col-md-offset-5" style="padding-left:20px;">
+
+
+            </div>
+        </div>
+
+
+        <hr>
+        <!-- Comment -->
+        <!-- Create the comment for the board -->
+        @using (Html.BeginForm("BoardCommentCreate", "BoardComment", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken();
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <!-- div for writing comments -->
+            <div class="row">
+                <div class="col col-md-1 col-md-offset-1">
+                    <strong>Comment</strong>
+                </div>
+
+                <!-- Write comments -->
+                <div class="col col-md-9">
+                    <div class="form-group">
+                        @Html.HiddenFor(Model => Model.BoardComment.BoardIDFK)
+                        @Html.HiddenFor(Model => Model.BoardComment.UserIDFK, new { Value = CurrUserIDPK })
+                        @Html.TextAreaFor(Model => Model.BoardComment.Content, new { @id = "comment-content", @type = "textarea", @class = "form-control" })
+                        @Html.ValidationMessageFor(Model => Model.BoardComment.Content, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div><br />
+
+            <!-- submit Button -->
+            <div class="row">
+                <input class="col col-sm-offset-6 btn btn-primary btn-sm" type="submit" value="Submit" />
+            </div>
+        }
+
+        <hr />
+
+        <!-- div for existing comments-->
+        <div class="col-md-8 col-sm-offset-2">
+            <table class="table comments">
+                <!-- index to be added as part of each row id -->
+                @{
+                    int index = 0;
+                }
+
+                <!-- Print all the comments -->
+                @foreach (BoardComment eachComment in Model.BoardCommentList)
+                {
+                    <tr>
+                        <!-- Comment author -->
+                        <th width="10%">
+                            <!-- if the role of current user is either Admin or Manager, enables to go to the author's profile-->
+                            @if (AUTHRoles.Contains(CurrRole))
+                            {
+                                @Html.ActionLink(eachComment.UserName, "UserProfile", "User", new { @id = eachComment.UserIDFK }, new { @style = "color:black; font-weight:bold;" })
+                            }
+                            else
+                            {
+                                <span>@eachComment.UserName</span>
+                            }
+
+                            <span>(@eachComment.UserRoleName)</span>
+                        </th>
+
+                        <!-- Content for each comment-->
+                        <td width="75%">
+                            <textarea id="@("each-comment"+index)">@eachComment.Content</textarea>
+                        </td>
+
+                        <!-- Date Modified -->
+                        <td width="10%">
+                            @eachComment.DateModified
+                        </td>
+
+                        <!-- Update Button: showed only to user with same IDPK -->
+                        @if (CurrUserIDPK == eachComment.UserIDFK)
+                        {
+                            <td width="5%">
+                                <a href='javascript:(0)' class="comment-update btn btn-primary btn-sm" , data-id="@eachComment.BoardCommentIDPK">Update</a>
+                            </td>
+                        }
+
+                        <!-- remove button: showed only to user with same IDPK or to manager/admin-->
+                        @if (CurrUserIDPK == @eachComment.UserIDFK || AUTHRoles.Contains(CurrRole))
+                        {
+                            <td>@Html.ActionLink("Remove", "BoardCommentRemove", "BoardComment", new { @id = eachComment.BoardCommentIDPK, @boardID = @Model.Board.BoardIDPK }, new { @class = "btn btn-danger btn-sm" })</td>
+
+                        }
+
+
+                    </tr>
+
+                    // increase index to give unique id for ckeditor
+                    index++;
+                }
+            </table>
+        </div>
+    </div>
+
+
+
+    <script>
+        // CKEDITOR for showing content. Read Only. Remove toolbar.
+        CKEDITOR.replace('boardContent', {
+            readOnly: true, // read only
+            toolbar: [], // remove toolbar
+
+            // set the height based on text length
+            extraPlugins: 'autogrow'
+        });
+
+        // CKEDITOR for writing comment. Collapse toolbar by default
+        CKEDITOR.replace('comment-content', { toolbarStartupExpanded: false, fullpage: false });
+
+        // CKEDITOR for each comment.
+        for (var index = 0; index <@Model.BoardCommentList.Count; index = index + 1) {
+            CKEDITOR.replace('each-comment' + index, {
+                readOnly: true, // read only
+                toolbar: [], // remove toolbar
+
+                 // set the height based on text length
+                extraPlugins: 'autogrow',
+                autoGrow_minHeight: '50',
+                fullpage: false
+            });
+        }
+
+    </script>
+</body>

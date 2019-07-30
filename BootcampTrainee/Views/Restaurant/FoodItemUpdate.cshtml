@@ -1,0 +1,109 @@
+﻿@using BootcampTrainee.Models.SubModel
+
+@model  FoodItem
+
+<div class="food-update-modal">
+    <!-- Header -->
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+        <h4 class="modal-title" id="myFoodUpdateModalLabel">Update Food Item</h4>
+    </div>
+    <hr />
+
+    <!-- Body -->
+    <div class="modal-body">
+        <form id="foodUpdateForm">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.HiddenFor(Model => Model.RestaurantIDFK)
+            @Html.HiddenFor(Model => Model.IsSandwichRestaurant)
+            @Html.HiddenFor(Model => Model.FoodItemIDPK)
+            <!-- Food Name -->
+            <div class="form-group">
+                @Html.LabelFor(Model => Model.FoodItemName)
+                @Html.EditorFor(Model => Model.FoodItemName, new { htmlAttributes = new { @class = "form-control" } })
+                <!-- Validation -->
+            </div>
+
+            <!-- Food type or Ingredient.  Depends on if it is a sandwich restaurant-->
+            @if (!Model.IsSandwichRestaurant)
+            {
+                <!-- Food Type selection -->
+                <div class="form-group">
+                    @Html.LabelFor(Model => Model.FoodTypeSelected)
+                    @Html.DropDownListFor(Model => Model.FoodTypeSelected, new SelectList(Model.FoodTypeList, "FoodTypeIDPK", "FoodTypeName"), new { @class = "form-control" })
+                </div>
+            }
+            else
+            {
+
+                <!-- Food type selection : Sandwich-->
+                @Html.HiddenFor(Model => Model.FoodTypeSelected, new { @Value = Model.FoodTypeList.Where(type => type.FoodTypeName == "Sandwich").ToList()[0].FoodTypeIDPK })
+
+                <!-- Food ingredient selection -->
+                <div class="form-group">
+                    @Html.LabelFor(Model => Model.IngredientTypeSelected)
+
+                    @Html.DropDownListFor(Model => Model.IngredientTypeSelected,
+                                           new SelectList(Model.IngredientTypeList, "IngredientTypeIDPK", "IngredientTypeName"),
+                                           new { @id = "IngredientTypeID", @class = "form-control" })
+                </div>
+            }
+
+            <!-- Description -->
+            <div class="form-group">
+                @Html.LabelFor(Model => Model.Description)
+                @Html.EditorFor(Model => Model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+
+            <!-- Price -->
+            <div class="form-group" id="item-price">
+                @Html.LabelFor(Model => Model.Price)
+                @Html.EditorFor(Model => Model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(Model => Model.Price, "", new { @class = "text-danger" })
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer" style="text-align:center;">
+        <button type="button" class="btn btn-primary" id="btnUpdate" value="Update">Update</button>
+    </div>
+</div>
+
+<!-- Call ajax post-->
+<script>
+    $(document).ready(function () {
+        if (@Model.Price.ToString() == "0.00"){
+            $('#item-price').hide();
+        }
+
+        $('#btnUpdate').click(function () {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("FoodItemUpdate", "Restaurant")',
+                data: $('#foodUpdateForm').serialize(),
+                dataType: 'json',
+                success: function (data) {
+
+                    // refresh page
+                    if (data.success == true) {
+                        alert("Successfully Updated!");
+                        location.reload();
+                    } else if( data.success == false ) {
+                        alert("Please Fill all Required fields properly.");
+                    }
+                },
+                failure: function () {
+                    alert("Please Try Again.");
+                    location.reload();
+                },
+                error: function () {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                    location.reload();
+                }
+            })
+        })
+    })
+</script>
+

@@ -1,0 +1,82 @@
+﻿@using BootcampTraineeDBObjects.Util;
+
+@model UserListUtil
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+@if (!string.IsNullOrEmpty((string)TempData["msg"]))
+{
+    // message if any
+    @Html.Raw(TempData["msg"])
+}
+
+<script>
+    $(document).ready(function () {
+        // color rows on load
+        colorRows();
+    });
+
+    // color rows for admin and manager
+    function colorRows() {
+        $('#user-list > tbody> tr').each(function () {
+            // color a row based on role
+            if ($(this).children('td:nth-child(6)').text() == "Admin") {
+                $(this).children('td').css("background-color", "#99ffd6")
+            } else if ($(this).children('td:nth-child(6)').text() == "Manager") {
+                $(this).children('td').css("background-color", "#EE82EE")
+            }
+        });
+    }
+
+</script>
+<body>
+    <div class="container" style="margin-top:30px">
+
+        <!-- List of Users-->
+        <div id="gridContainer">
+            <div id="grid">
+                <!-- Initialize webgrid and bind data-->
+                @{
+                    WebGrid grid = new WebGrid(null, ajaxUpdateContainerId: "grid", ajaxUpdateCallback: "colorRows", rowsPerPage: Model.PageSize);
+                    grid.Bind(Model.UserList, autoSortAndPage: true, rowCount: Model.PageSize);
+                }
+
+                <!-- Admin should be able to remove/reactivate user-->
+                @grid.GetHtml(tableStyle: "table table-ordered", headerStyle: "webgrid-header",
+                  htmlAttributes: new { name = "user-list", @id = "user-list", @class = "grid-list" },
+                  mode: WebGridPagerModes.All,
+                  firstText: "<< First",
+                  previousText: "< Prev",
+                  nextText: "Next >",
+                  lastText: "Last >>",
+                  columns: grid.Columns(
+                    grid.Column("", "No.", format: item => item.WebGrid.Rows.IndexOf(item) + 1),
+                    grid.Column("", "", format: @<input type="hidden" name="UserIDPK" value="@item.UserIDPK">),
+                    grid.Column("UserLogInID", "SignIn ID", format: @<strong>@Html.ActionLink((string)item.UserLogInID, "UserProfile", "User", new { @id = item.UserIDPK }, new { @style = "color:black" })</strong>),
+                    grid.Column("UserFirstName", "First Name"),
+                    grid.Column("UserLastName", "Last Name"),
+                    grid.Column("UserRoleName", "Position"),
+                    grid.Column("UserBirth", "Birth", format:@<text>@item.UserBirth.ToShortDateString()</text>),
+                    grid.Column("UserEmail", "Email", format:@<strong class="email" data-id="UserEmail"><a href="mailto:'@item.UserEmail'" style="color:black;">@item.UserEmail</a></strong>),
+                    grid.Column("UserPhone", "Phone"),
+                    grid.Column("UserIsActive", "Status", format:@<text>@(item.UserIsActive == 1 ? "Active" : "Inactive") </text>)))
+            </div>
+
+            <!-- Search Bar -->
+            <div style="text-align:center;">
+                @using (Html.BeginForm("UserList", "User", FormMethod.Get))
+                {
+                    <input type="text" name="searchString" id="searchString" maxlength="20" />
+
+                    // button to submit search
+                    <input class="btn btn-primary btn-sm" type="submit" id="btnSearch" value="Search" />
+
+                    // button to reset search
+                    @Html.ActionLink("Reset", "UserList", "User", null, new { @type = "button", @class = "btn btn-primary btn-sm" })
+                }
+
+            </div>
+        </div>
+    </div>
+</body>
+

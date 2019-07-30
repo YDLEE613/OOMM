@@ -1,0 +1,92 @@
+﻿@using BootcampTrainee.Models
+@using BootcampTrainee.Models.SubModel
+
+@model Board
+
+@{
+    string RoleAdmin = "Admin";
+    string RoleManager = "Manager";
+    // roles that can fix posts
+    List<string> AUTHRoles = new List<string>() { RoleAdmin, RoleManager };
+
+    string CurrRole = (string)Session["AUTHRole"];
+}
+<head>
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+</head>
+<!-- Get user id from session -->
+@using (Html.BeginForm("BoardCreate", "Board"))
+{
+    @Html.AntiForgeryToken()
+
+    <body>
+        <br /><br />
+        <!-- show message -->
+        @{
+            <div class="@(Model.type==1?"alert alert-success":(Model.type==-1?"alert alert-danger":"alert alert-info"))" role="alert" style="text-align:center;">
+                @Model.message
+            </div>
+        }
+        <div class="container form-horizontal">
+            <form method="post">
+                <!-- Title -->
+                <div class="form-group">
+                    @Html.LabelFor(Model => Model.Title, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(Model => Model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(Model => Model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div class="form-group">
+                    @Html.LabelFor(Model => Model.CategoryName, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-10">
+                        @Html.RadioButtonFor(Model => Model.CategoryIDFK, 1) @Html.Label("Codes")
+                        @Html.RadioButtonFor(Model => Model.CategoryIDFK, 2) @Html.Label("Info")
+                    </div>
+                    @Html.ValidationMessageFor(Model => Model.CategoryIDFK, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- is Fixed only to manager and admin -->
+                @if (AUTHRoles.Contains(CurrRole))
+                {
+                    <div class="form-group">
+                        @Html.LabelFor(Model => Model.IsFixed, htmlAttributes: new { @class = "control-label col-md-1" })
+                        <div class="col-md-10">
+                            @Html.RadioButtonFor(Model => Model.IsFixed, 0) @Html.Label("No")
+                            @Html.RadioButtonFor(Model => Model.IsFixed, 1) @Html.Label("Yes")
+                        </div>
+                        @Html.ValidationMessageFor(Model => Model.IsFixed, "", new { @class = "text-danger" })
+                    </div>
+                }
+
+                <!-- Content -->
+                <div class="form-group">
+                    @Html.LabelFor(Model => Model.Content, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(Model => Model.Content,
+                            new {
+                                @class = "form-control",
+                                @type = "textarea",
+                                @id = "board-content",
+                                @placeholder = "Share Anything you want!"
+                            })
+                        @Html.ValidationMessageFor(Model => Model.Content, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <!-- buttons-->
+                <button type="submit" class="btn btn-primary col-md-offset-5">Submit</button>
+                @Html.ActionLink("Cancel", "BoardList",null, new { @class = "btn btn-danger", @float = "right" })
+            </form>
+            <script>
+                CKEDITOR.replace('board-content');
+            </script>
+        </div>
+    </body>
+}
+
+

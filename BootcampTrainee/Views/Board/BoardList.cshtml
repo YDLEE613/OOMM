@@ -1,0 +1,167 @@
+﻿@using BootcampTraineeDBObjects.Util
+
+@model BoardListUtil
+@{
+    // roles that can remove any posts
+    List<string> AUTHRoles = new List<string> { "Admin", "Manager" };
+
+    // current user role
+    string CurrRole = Session["AUTHRole"] as string;
+
+    // message if needed
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"])
+    }
+
+    string searchString = null;
+
+    // for search string
+    if (!string.IsNullOrEmpty((string)ViewBag.searchString))
+    {
+        searchString = (string)ViewBag.searchString;
+    }
+}
+
+
+<script>
+    // function to color posts that are fixed
+    function colorRows() {
+        // if the role of current user is either Admin or manager, there is one more button in the list.
+        if (@AUTHRoles.Contains(CurrRole).ToString().ToLower() == true) {
+
+            // Find posts that are supposed to be fixed and add background color and class
+            $('#board-list > tbody > tr').each(function (index) {
+
+                if (parseInt($(this).children('td:nth-child(8)').text()) == 1) {
+
+                    // add background color for entire row
+                    $(this).children('td').css("background-color", "#ccffd9");
+
+                    // add class for every cell
+                    $(this).children('td').addClass("fixed-row");
+                }
+            });
+        } else {
+
+            // Find posts that are supposed to be fixed and add background color and class
+            $('#board-list > tbody > tr').each(function (index) {
+                if (parseInt($(this).children('td:nth-child(7)').text()) == 1) {
+
+                    // add background color for entire row
+                    $(this).children('td').css("background-color", "#ccffd9");
+
+                    // add class for every cell
+                    $(this).children('td').addClass("fixed-row");
+                }
+            });
+        }
+    }
+
+    // color rows on page load
+    $(document).ready(function () {
+        colorRows();
+    });
+
+    // call back function for webgrid sorting
+    function reloadPage() {
+        colorRows();
+    }
+</script>
+
+<!-- body -->
+<body>
+    <br /><br />
+    <div class="container col-sm-12">
+
+        <!-- button to write a post -->
+        <div class="form-group col-xs-8">
+            @Html.ActionLink("Write", "BoardCreate", "Board", null, new { @type = "button", @class = "btn btn-primary btn-block", @style = "padding:2px; height:26px" })
+        </div>
+
+        <!-- Search bar -->
+        <div class="">
+            @using (Html.BeginForm("BoardList", "Board", FormMethod.Get))
+            {
+                <!-- dropdown list for category-->
+                @Html.DropDownListFor(model => model.Category, Model.CategoryList, new { @style = "height:26px;" })
+
+                <!-- input for search string-->
+                <input type="text" name="searchString" id="searchString" maxlength="20" />
+
+                <!-- Submit button -->
+                <input class="btn btn-primary btn-sm" type="submit" id="btnSearch" value="Search" />
+
+                <!-- button to reset search -->
+                @Html.ActionLink("Reset", "BoardList", "Board", new { @category = "", @searchString = "" }, new { @type = "button", @class = "btn btn-primary btn-sm" })
+            }
+        </div>
+
+        @{
+
+            // For posts within 24 within hours, full date with time.
+            // For other posts, only date
+            DateTime yesterday = DateTime.Now.AddDays(-1);
+
+            // Initialize webgrid and bind data
+            WebGrid grid = new WebGrid(null, ajaxUpdateContainerId: "grid", ajaxUpdateCallback: "reloadPage", rowsPerPage: Model.PageSize);
+            grid.Bind(Model.BoardList, rowCount: Model.PageSize, autoSortAndPage: true);
+        }
+
+        <!-- if admin or manager, show remove button-->
+        @if (AUTHRoles.Contains(CurrRole))
+        {
+            <div id="gridContainer">
+                <div id="grid">
+                    @grid.GetHtml(tableStyle: "table table-condensed", headerStyle: "text-center",
+                         htmlAttributes: new { name = "board-list", id = "board-list", @class = "grid-list" },
+                         mode: WebGridPagerModes.All,
+
+                         // For pagination
+                         firstText: "<< First",
+                         previousText: "< Prev",
+                         nextText: "Next >",
+                         lastText: "Last >>",
+
+                         // add columns with headers and format values inside the grid
+                         columns: grid.Columns(
+                            grid.Column("", "No.", format: item => item.WebGrid.Rows.IndexOf(item) + 1, style: "board-no"),
+                            grid.Column("", "", format: @<input type="hidden" name="BoardIDPK" value="@item.BoardIDPK">),
+                            grid.Column("Title", "Title", format: @<strong> @Html.ActionLink((string)item.Title, "BoardView", "Board", new { @id = item.BoardIDPK }, new { @style = "color:black" }) </strong>, style: "board-title mark-text"),
+                            grid.Column("UserName", "Author", format:@<strong>@Html.ActionLink((string)item.UserName, "UserProfile", "User", new { @id = item.UserIDFK }, new { @style = "color:black" })</strong>, style: "board-author mark-text"),
+                            grid.Column("DateModified", "Written", format:@<text>@(@item.DateModified > yesterday ? @item.DateModified : @item.DateModified.ToShortDateString())</text>, style: "board-written mark-text"),
+                            grid.Column("CategoryName", "Category", style: "board-category"),
+                            grid.Column("", "", format:@<text>@Html.ActionLink("Remove", "BoardRemove", "Board", new { @id = item.BoardIDPK }, new { @class = "btn btn-danger btn-sm" })</text>),
+                            grid.Column("", "", format:@<text><span style="visibility:hidden">@item.IsFixed</span></text>)))
+                </div>
+            </div>
+        }
+        else
+        {
+            // For trainees, don't show remove button
+            <div id="gridContainer">
+                <div id="grid">
+                    @grid.GetHtml(tableStyle: "table table-condensed", headerStyle: "text-center",
+                        htmlAttributes: new { name = "board-list", id = "board-list" },
+                        mode: WebGridPagerModes.All,
+
+                        // For pagination
+                        firstText: "<< First",
+                        previousText: "< Prev",
+                        nextText: "Next >",
+                        lastText: "Last >>",
+
+                        // add columns with headers and format values inside the grid
+                        columns: grid.Columns(
+                            grid.Column("", "No.", format: item => item.WebGrid.Rows.IndexOf(item) + 1, style: "board-no unfixed-no"),
+                            grid.Column("", "", format: @<input type="hidden" name="BoardIDPK" value="@item.BoardIDPK">),
+                            grid.Column("Title", "Title", format: @<strong>@Html.ActionLink((string)item.Title, "BoardView", "Board", new { @id = item.BoardIDPK }, new { @style = "color:black" })</strong>, style: "board-title"),
+                            grid.Column("UserName", "Author", style: "board-author"),
+                            grid.Column("DateModified", "Written", format:@<text>@(@item.DateModified > yesterday ? @item.DateModified : @item.DateModified.ToShortDateString())</text>, style: "board-written"),
+                            grid.Column("CategoryName", "Category", style: "board-category"),
+                            grid.Column("", "", format:@<text><span style="visibility:hidden">@item.IsFixed</span></text>)))
+                </div>
+            </div>
+        }
+    </div>
+</body>

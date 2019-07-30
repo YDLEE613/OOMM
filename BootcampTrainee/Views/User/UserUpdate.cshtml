@@ -1,0 +1,178 @@
+﻿@using BootcampTrainee.Models
+
+@model User
+
+@{
+    // Roles that can update
+    string RoleAdmin = "Admin";
+    string RoleManager = "Manager";
+    List<string> AUTHRoles = new List<string>() { RoleAdmin, RoleAdmin };
+
+    // Current user role
+    string CurrRole = Session["AUTHRole"] as string;
+    int CurrUser = Convert.ToInt32(Session["AUTHUserIDPK"]);
+
+    // message if any
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"])
+    }
+}
+
+<script type="text/javascript">
+    // change type for password input on mouse hover
+    function mouseoverPass(obj) {
+        var obj = document.getElementById('password');
+        obj.type = "text";
+    }
+    function mouseoutPass(obj) {
+        var obj = document.getElementById('password');
+        obj.type = 'password';
+    }
+    function mouseoverConfPass(obj) {
+        var obj = document.getElementById('Confpassword');
+        obj.type = "text";
+    }
+    function mouseoutConfPass(obj) {
+        var obj = document.getElementById('Confpassword');
+        obj.type = 'password';
+    }
+</script>
+
+
+@using (Html.BeginForm("UserUpdate", "User"))
+{
+    @Html.AntiForgeryToken()
+    <body>
+        <div class="container" style="margin-top:30px;">
+            <form method="post">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(Model => Model.UserIDPK)
+                @Html.HiddenFor(Model => Model.UserRoleIDFK)
+                @Html.HiddenFor(Model => Model.UserIsActive)
+
+                <!-- First Name -->
+                <labal class="control-label">
+                    @Html.LabelFor(Model => Model.UserFirstName)
+                </labal>
+                <div class="input-group form-group required">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    @Html.EditorFor(Model => Model.UserFirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(Model => Model.UserFirstName, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Last Name -->
+                <labal class="control-label">
+                    @Html.LabelFor(Model => Model.UserLastName)
+                </labal>
+                <div class="input-group form-group required">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    @Html.EditorFor(Model => Model.UserLastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(Model => Model.UserLastName, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Login ID -->
+                <labal class="control-label">
+                    @Html.LabelFor(Model => Model.UserLogInID)
+                </labal>
+                <div class="input-group form-group required">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    @Html.EditorFor(Model => Model.UserLogInID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(Model => Model.UserLogInID, "", new { @class = "text-danger" })
+                </div>
+
+                @if (CurrUser == Model.UserIDPK)
+                {
+                    <!-- Password -->
+                    <labal class="control-label">
+                        @Html.LabelFor(Model => Model.UserPassword)
+                    </labal>
+                    <div class="input-group form-group required">
+                        <span class="input-group-addon"> <i class="glyphicon glyphicon-lock" onmouseover="mouseoverPass();" onmouseout="mouseoutPass();"></i> </span>
+                        @Html.TextBoxFor(Model => Model.UserPassword, new { @Value = Model.UserPassword, @class = "form-control", @id = "password", @type = "password" })
+                        @Html.ValidationMessageFor(Model => Model.UserPassword, "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Confirm password -->
+                    <labal class="control-label">
+                        @Html.LabelFor(Model => Model.ConfirmPassword)
+                    </labal>
+                    <div class="input-group form-group required">
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-lock" onmouseover="mouseoverConfPass();" onmouseout="mouseoutConfPass();"></i>
+                        </span>
+                        @Html.TextBoxFor(Model => Model.ConfirmPassword, new { @class = "form-control", @id = "Confpassword", @type = "password" })
+                        @Html.ValidationMessageFor(Model => Model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    <!-- Password -->
+                    <labal class="control-label">
+                        @Html.LabelFor(Model => Model.UserPassword)
+                    </labal>
+                    <div class="input-group form-group required">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        @Html.TextBoxFor(Model => Model.UserPassword,new { @Value = Model.UserPassword, @class = "form-control", @id = "password", @type = "password", @readonly = "readonly" })
+                    </div>
+
+                    <!-- Confirm password -->
+                    <labal class="control-label">
+                        @Html.LabelFor(Model => Model.ConfirmPassword)
+                    </labal>
+                    <div class="input-group form-group required">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        @Html.TextBoxFor(Model => Model.ConfirmPassword, new { @Value = Model.UserPassword, @class = "form-control", @id = "Confpassword", @type = "password", @readonly = "readonly" })
+                    </div>
+                }
+
+                <!-- Birth -->
+                @Html.LabelFor(Model => Model.UserBirth)
+                <div class="input-group form-group required">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    @Html.TextBoxFor(Model => Model.UserBirth,
+                        new { @Value = Model.UserBirth.ToShortDateString(), @class = "form-control" })
+                    @Html.ValidationMessageFor(Model => Model.UserBirth, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Email -->
+                @Html.LabelFor(Model => Model.UserEmail)
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+                    @Html.TextBoxFor(Model => Model.UserEmail,
+                        new { @Value = Model.UserEmail, @class = "form-control" })
+                    @Html.ValidationMessageFor(Model => Model.UserEmail, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Phone -->
+                @Html.LabelFor(Model => Model.UserPhone)
+                <div class="input-group form-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                    @Html.TextBoxFor(Model => Model.UserPhone,
+                        new { @Value = Model.UserPhone, @class = "form-control" })
+                    @Html.ValidationMessageFor(Model => Model.UserPhone, "", new { @class = "text-danger" })
+                </div>
+
+
+                <!-- show roles only to admin and manager -->
+                @if (AUTHRoles.Contains(CurrRole) && !(CurrRole == RoleManager && Model.UserRoleName == RoleAdmin))
+                {
+                    <!-- Roles -->
+                    <div class="control-label">
+                        @Html.LabelFor(Model => Model.UserRoleIDFK)
+                    </div>
+                    <div class="input-group form-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-wrench"></i></span>
+                        @Html.DropDownListFor(Model => Model.UserRoleIDFK, new SelectList(Model.RoleList, "RoleIDPK", "RoleName"), new { @class = "form-control" })
+                    </div>
+                }
+
+                <!-- Submit and cancel button-->
+                <div class="col-sm-offset-1">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                    @Html.ActionLink("Cancel", "UserProfile", "User", new { id = Model.UserIDPK }, new { @type = "button", @class = "btn btn-danger btn-sm" })
+                </div>
+            </form>
+        </div>
+    </body>
+}

@@ -1,0 +1,147 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    height: 100%;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.form-group.required, .control-label:after {
+    content: "*";
+    color: red;
+}
+
+
+#tab-nav > .nav-pills > li > a {
+    border-radius: 5px 5px 0 0;
+}
+
+.navbar > .container > #navbar-right {
+    float: right;
+}
+
+#tab-nav > .tab-content {
+    padding: 5px 15px;
+}
+
+    #tab-nav > .tab-content > #nav-info > #content-info {
+        align-items: flex-start;
+    }
+
+#borderless td, #borderless th {
+    border: none;
+}
+
+.row-board-view {
+    margin-top: 10px !important;
+}
+
+/* scroll top button */
+.scrollToTop {
+    margin: 0 50px 50px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+/* hover on user list */
+#user-list > th > a, #user-list > th > a:visited {
+}
+
+#user-list > tbody > tr:hover td {
+    background-color: #e6ff99;
+}
+
+
+/* hover on board list*/
+#board-list > th > a, #board-list > th > a:visited {
+}
+
+#board-list > tbody > tr:hover td {
+    background-color: #e6ff99;
+}
+
+/* hover on restaurant list */
+#restaurant-list > th > a, #restaurant-list > th > a:visited {
+}
+
+#restaurant-list > tbody > tr:hover td {
+    background-color: #e6ff99;
+}
+
+/* board */
+.board-no {
+    width: 35px !important;
+}
+
+.board-title {
+    width: 450px !important;
+}
+
+.board-author {
+    width: 180px !important;
+}
+
+.board-written {
+    width: 200px !important;
+}
+
+.board-category {
+    width: 80px !important;
+}
+
+#comment-info > #CommentGrid > table > thead > tr > th:nth-child(1) {
+    width: 580px;
+}
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 700px) {
+    .row-offcanvas {
+        position: relative;
+        -webkit-transition: all .25s ease-out;
+        -o-transition: all .25s ease-out;
+        transition: all .25s ease-out;
+    }
+
+    .sidebar-offcanvas {
+        position: absolute;
+        width: 60%; /* 6 columns */
+        display: none;
+    }
+
+    .row-offcanvas-right {
+        right: 0;
+    }
+
+        .row-offcanvas-right.active
+        .sidebar-offcanvas {
+            display: block;
+            right: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        .row-offcanvas-right.active {
+        }
+}

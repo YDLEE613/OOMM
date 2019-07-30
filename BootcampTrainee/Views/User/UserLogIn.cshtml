@@ -1,0 +1,48 @@
+﻿@using BootcampTrainee.Models
+
+@model User
+
+@{
+    // current user id and password
+    string id = (string)TempData["UserLogInID"];
+    string password = (string)TempData["UserPassword"];
+
+    // message if any
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"])
+    }
+}
+@using (Html.BeginForm("UserLogIn", "User", FormMethod.Post, new { @class = "align-middle", @style = "height:100%" }))
+{
+    <body>
+        <div class="container">
+            <div class="row justify-content-center h-100" style="margin-top:15%; margin-bottom:10%;">
+                <div class="col-md-6 col-md-offset-4">
+
+                    <form method="post">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <!-- User LogIn ID -->
+                        <div class="form-group">
+                            @Html.TextBoxFor(Model => Model.UserLogInID, new { @Value = id, @class = "form-control", @placeholder = "Username", @maxlength = "50" })
+                        </div>
+
+                        <!-- User Password -->
+                        <div class="form-group">
+                            @Html.TextBoxFor(Model => Model.UserPassword, new { @Value = password, @class = "form-control", @placeholder = "Password", @type = "password", @maxlength = "20" })
+                        </div>
+
+                        <!-- button to sign in-->
+                        <button type="submit" class="btn btn-primary col-md-offset-1">Sign In</button>
+                    </form>
+
+                    <!-- button to sign up -->
+                    @Html.ActionLink("Sign Up", "UserRegister", "User", null, new { @type = "button", @class = "btn btn-primary" })
+
+                </div>
+            </div>
+        </div>
+    </body>
+}
+

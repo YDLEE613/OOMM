@@ -1,0 +1,55 @@
+﻿@using BootcampTraineeDBObjects
+@using BootcampTraineeDBObjects.SubDBO;
+
+@model List<UserOrderRatingDBO>
+
+
+<div>
+    <!-- modal header -->
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+        <h4 class="modal-title" id="myRatingModalLabel">List of Top 20 Ratings</h4>
+    </div>
+
+    <!-- modal body-->
+    <div class="modal-body">
+        <table class="table">
+            @foreach (UserOrderRatingDBO each in Model)
+            {
+                <tr style="background-color:aquamarine;">
+                    <!-- name -->
+                    <th>Name</th>
+                    <td>@each.UserName</td>
+                    <!-- score -->
+                    <th>Score:</th>
+                    <td>@each.Score</td>
+                </tr>
+
+                <!-- food items in each order-->
+                string foodItems = "";
+                foreach (FoodItemDBO eachItem in each.FoodItemList)
+                {
+                    foodItems += eachItem.FoodItemName + ", ";
+                }
+                <tr>
+                    <th>Items</th>
+                    <td colspan="3">@foodItems.Substring(0, foodItems.Length - 1)</td>
+                </tr>
+
+                <!-- content -->
+                <tr>
+                    <th>Review</th>
+                    @if (string.IsNullOrEmpty(@each.Content))
+                    {
+                        <td colspan="3">None</td>
+                    }
+                    else
+                    {
+                        <td colspan="3">@each.Content</td>
+                    }
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>

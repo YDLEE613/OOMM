@@ -1,0 +1,21 @@
+﻿@{
+
+    // admin and manager
+
+    List<string> AUTHRoles = new List<string>() { "Admin", "Manager" };
+    // current user
+    string CurrRole = Session["AUTHRole"] as string;
+
+    if (AUTHRoles.Contains(CurrRole))
+    {
+        Layout = "~/Views/Shared/_LayoutAdminManager.cshtml";
+    }
+    else if (CurrRole == "Trainee")
+    {
+        Layout = "~/Views/Shared/_LayoutTrainee.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutAnonymous.cshtml";
+    }
+}

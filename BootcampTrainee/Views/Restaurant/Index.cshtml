@@ -1,0 +1,202 @@
+﻿@using BootcampTraineeDBObjects;
+
+@model List<RestaurantDBO>
+
+@{
+    // roles that can check price and user orders
+    List<string> AUTHRoles = new List<string> { "Admin", "Manager" };
+    string CurrRole = Session["AUTHRole"] as string;
+
+    // message if any
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"])
+        <script>
+            location.reload();
+        </script>
+    }
+
+
+}
+
+<head>
+    <!-- for modal -->
+    <link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<h2 style="text-align:center;">Restaurants for This Week</h2>
+
+<script>
+    // call ajax for checking orders
+    $(function () {
+        $(".checkorders").click(function () {
+            var $buttonClicked = $(this);
+            var restaurantID = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "false", show: true, keyboard: true }
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/Restaurant/OrderCheck",
+                data: { id: restaurantID },
+                success: function (data) {
+                    $('#myOrderCheckModalContent').html(data);
+                    $('#myOrderCheckModal').modal(options);
+                    $('#myOrderCheckModal').modal('show');
+                    $('.modal-dialog').draggable({
+                        handle: ".modal-header"
+                    });
+                },
+                failure: function () {
+                    // refresh page with message on failure
+                    alert("Error occured while processing your request. Please try later.");
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                }
+            })
+        })
+        $('.checkratings').click(function () {
+            var $buttonClicked = $(this);
+            var restaurantID = $buttonClicked.attr('data-id');
+            var options = { "backdrop": "false", show: true, keyboard: true }
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/Restaurant/GetTopRatedOrder",
+                data: { id: restaurantID },
+                success: function (data) {
+                    $('#myRatingCheckModalContent').html(data);
+                    $('#myRatingCheckModal').modal(options);
+                    $('#myRatingCheckModal').modal('show');
+                    $('.modal-dialog').draggable({
+                        handle: '.modal-header'
+                    });
+                },
+                failure: function () {
+                    // refresh page with message on failure
+                    alert("Error occured while processing your request. Please try later.");
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+
+                }
+            })
+        })
+    })
+</script>
+
+<!-- order check modal -->
+<div id="myOrderCheckModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="myOrderCheckModalContent">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- check ratings modal-->
+<div id="myRatingCheckModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="myRatingCheckModalContent">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="index-restaurant" id="">
+        <table class="table table-responsive" style="text-align:center;">
+
+
+            <thead>
+                <!-- Day of week -->
+                <tr>
+                    @foreach (RestaurantDBO each in Model)
+                    {
+                        <th class="text-center" scope="col">
+                            @each.DayofWeek
+                        </th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Name of Restaurants-->
+                <tr>
+                    @foreach (RestaurantDBO each in Model)
+                    {
+                        <th class="text-center" scope="col">
+
+                            @if (AUTHRoles.Contains(CurrRole))
+                            {
+                                @Html.ActionLink((string)each.RestaurantName, "RestaurantProfile", "Restaurant", new { id = each.RestaurantIDPK }, new { @style = "color:black" })
+                            }
+                            else
+                            {
+                                @each.RestaurantName
+                            }
+                        </th>
+                    }
+
+                </tr>
+
+                <!-- Buttons for order-->
+                <tr>
+                    @foreach (RestaurantDBO each in Model)
+                    {
+                        <td> @Html.ActionLink("Order", "OrderSelection", new { @id = each.RestaurantIDPK }, new { @class = "btn btn-primary" })</td>
+                    }
+                </tr>
+            </tbody>
+
+            <!-- Show buttons to check orders and ratings only to admin and manager -->
+
+            <tfoot>
+                @if (AUTHRoles.Contains(CurrRole))
+                {
+                    <tr>
+                        <!-- button for each restaurant-->
+                        @foreach (RestaurantDBO each in Model)
+                        {
+                            <td>
+                                <a href='javascript:void(0)' class="checkratings btn btn-primary" data-id='@each.RestaurantIDPK'>Check Ratings</a>
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <!-- button for each restaurant-->
+                        @foreach (RestaurantDBO each in Model)
+                        {
+                            <td>
+                                <a href='javascript:void(0)' class="checkorders btn btn-primary" data-id='@each.RestaurantIDPK'>Check Orders</a>
+
+                            </td>
+                        }
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <!-- button for each restaurant-->
+                        @foreach (RestaurantDBO each in Model)
+                        {
+                            <td>
+                                <a href='javascript:void(0)' class="checkratings btn btn-primary" data-id='@each.RestaurantIDPK'>Check Ratings</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tfoot>
+
+            <!-- show button the check ratings only to trainees-->
+
+        </table>
+    </div>
+</div>
+
+

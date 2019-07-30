@@ -1,0 +1,31 @@
+﻿@using BootcampTraineeDBObjects.SubDBO;
+
+@model List<FoodItemDBO>
+
+<!-- Modal -->
+<div>
+
+    <!--header-->
+    <div class="modal-header">
+
+        <!-- Close Button -->
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            X
+        </button>
+        <!-- Modal Title -->
+        <h4 class="modal-title" id="myFoodModalLabel">Order Details</h4>
+    </div>
+    <hr />
+
+    <!-- body -->
+    <div class="dl-horizontal" style="margin-left:15px;">
+       
+        <!-- show each item in the order-->
+        @foreach (FoodItemDBO each in Model)
+        {
+            <span><b>@each.FoodItemName</b></span>
+            <br />
+        }
+    </div>
+    <hr />
+</div>

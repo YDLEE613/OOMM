@@ -1,0 +1,91 @@
+﻿@using BootcampTrainee.Models
+
+@model UserOrderRating
+
+<!-- modal -->
+<div id="postModal">
+    <div class="modal-header">
+
+        <!-- header and close button for modal-->
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            X
+        </button>
+        <h4 class="modal-title" id="myRatingModalLabel">Order Rating</h4>
+    </div>
+    <hr />
+
+    <!-- Form to be submitted-->
+    <div class="dl-horizontal" style="margin-left:15px;">
+        <div class="form-group">
+            <form id="submitForm">
+                <!-- review for rating -->
+                @Html.HiddenFor(Model => Model.UserOrderIDFK)
+                @Html.TextAreaFor(Model => Model.Content,
+                    new { @class = "form-control", @type = "textarea", @id = "rating-comment", @placeholder = "Enter Review!", @rows = "5", @maxlength = "200" })
+                
+                <!-- rating stars -->
+                <input type="number" id="food-rate-star" name="score" required class="rating rating-loading small" min="1" max="5" step="0.5">
+                @Html.Hidden("Score", Model.Score)
+            </form>
+        </div>
+    </div>
+
+    <!-- Submit button-->
+    <div class="modal-footer" style="text-align:center">
+        <button type="button" class="btn btn-primary" id="btnSubmit" value="Submit">Submit</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // star rating
+        $('#food-rate-star').rating();
+
+        // get the value of star rating
+        $('#food-rate-star').change(function (event) {
+            $('#Score').val($('#food-rate-star').text())
+        });
+
+        // call ajax post call
+        $('#btnSubmit').click(function () {
+            var foodRating = new Object();
+
+            foodRating.OrderIDFK = @Model.UserOrderIDFK;
+            foodRating.review = $('#rating-comment').val();
+            foodRating.score = $('#food-rate-star').val();
+
+            // if user tries to submit without any rates, show a message
+            if ($('#food-rate-star').val() == null || $('#food-rate-star').val() == '') {
+                alert("Rate your order!")
+                return;
+            }
+
+            $.ajax({
+                cache:false, // don't add to cache
+                type: "POST",
+                url: '@Url.Action("UserOrderRating", "User")',
+                data: $('#submitForm').serialize(),
+                dataType: 'json',
+                success: function (data) {
+
+                    // refresh page with message on success
+                    if (data.success == true) {
+                        alert("Successfully Submitted!");
+                        location.reload();
+                    }
+                },
+                failure: function () {
+                    // refresh page with message on failure
+                    alert("Error occured while processing your request. Please try later")
+                    location.reload(); 
+                },
+                error: function (request, status, error) {
+                    alert("Error occured. Please try later.");
+                    location.reload();
+                }
+            })
+        })
+    })
+</script>
+
+

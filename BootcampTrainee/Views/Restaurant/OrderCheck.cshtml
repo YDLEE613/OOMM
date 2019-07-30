@@ -1,0 +1,145 @@
+﻿@using BootcampTraineeDBObjects
+@using BootcampTraineeDBObjects.SubDBO
+
+@model  List<UserOrderDBO>
+
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+        <h4 class="modal-title" id="myOrderModalLabel">List of Orders</h4>
+    </div>
+    <hr />
+    <div class="modal-body">
+        <table class="table">
+            @{
+                DateTime yesterday = DateTime.Now.AddDays(-1);
+                string prevDate = null;
+                int lastOrder = Model[Model.Count - 1].UserOrderIDPK;
+                decimal total = 0;
+            }
+            @foreach (UserOrderDBO each in Model)
+            {
+                @Html.Hidden("UserOrderIDPK", each.UserOrderIDPK)
+                @Html.Hidden("UserIDFK", each.UserIDFK)
+                @Html.Hidden("RestaurantIDFK", each.RestaurantIDFK)
+                @Html.Hidden("RestaurantName", each.RestaurantName)
+
+                // divider for different dates
+                if (prevDate != null)
+                {
+
+                    // prints date if it is different from previous order
+                    if (prevDate != each.DateOrdered.ToShortDateString())
+                    {
+                        <tr style="background-color:aquamarine">
+                            <!--print total if different date-->
+                            @if (prevDate != each.DateOrdered.ToShortDateString())
+                            {
+                                <th>Total</th>
+                                <td>$@total</td>
+
+                                <!-- reset total -->
+                                total = 0;
+
+                                <!-- change prevDate for comparison with next date -->
+                                prevDate = @each.DateOrdered.ToShortDateString();
+                            }
+                        </tr>
+
+                        <!-- show Date -->
+                        <tr style="background-color: khaki; text-align:center;">
+                            <td colspan="2">@each.DateOrdered.ToShortDateString()</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- show Date -->
+                    <tr style="background-color: khaki; text-align:center;">
+                        <td colspan="2">
+                            @if (DateTime.Now.ToShortDateString() == each.DateOrdered.ToShortDateString())
+                            {
+                                <strong>Today</strong>
+                            }
+                            else
+                            {
+                                <text>@each.DateOrdered.ToShortDateString()</text>
+                            }
+                        </td>
+                    </tr>
+                }
+
+                <!-- Name -->
+                <tr style="background-color:bisque ">
+                    <th>Name</th>
+                    <td>@each.UserName</td>
+                </tr>
+
+                <!-- Order -->
+                <tr>
+                    <th>Order</th>
+                    @{
+                        // append each item to a string seperataed by a comma, except for the last item
+                        string items = "";
+                        for (int index = 0; index < each.FoodItemList.Count; index++)
+                        {
+                            if (index == each.FoodItemList.Count - 1)
+                            {
+                                items += each.FoodItemList[index].FoodItemName;
+                            }
+                            else
+                            {
+                                items += each.FoodItemList[index].FoodItemName + ", ";
+                            }
+                        }
+                    }
+                    <td>@items</td>
+                </tr>
+
+                <!-- Order Price -->
+                <tr>
+                    <th>Price</th>
+                    <td>$@each.OrderPrice</td>
+                    @{
+                        total += each.OrderPrice;
+                    }
+                </tr>
+                <!-- Note -->
+                <tr>
+                    <th>Note</th>
+                    <td>@each.UserNote</td>
+                </tr>
+
+                <!-- Date Orderd. If in 24 hour, bold the date and time. Otherwise, just show date.-->
+                <tr>
+                    @if (each.DateOrdered > yesterday)
+                    {
+                        <th>Date</th>
+                        <td><strong>@each.DateOrdered.ToShortTimeString()</strong></td>
+                    }
+                    else
+                    {
+                        <th>Date</th>
+                        <td>@each.DateOrdered.ToShortDateString()</td>
+                    }
+                </tr>
+
+                // print total for orders on last date on the list
+                if (each.UserOrderIDPK == lastOrder)
+                {
+                    <tr style="background-color:aquamarine">
+                        <th>Total</th>
+                        <td>$@total</td>
+                    </tr>
+                }
+
+                <!--print total if different date-->
+                if (prevDate != each.DateOrdered.ToShortDateString())
+                {
+                    // change prevDate for comparison with next date
+                    prevDate = each.DateOrdered.ToShortDateString();
+                }
+            }
+        </table>
+    </div>
+</div>

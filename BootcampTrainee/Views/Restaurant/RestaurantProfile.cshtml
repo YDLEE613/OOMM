@@ -1,0 +1,340 @@
+﻿@using BootcampTraineeDBObjects.Util
+@model RestaurantFoodsRatingUtil
+
+@{
+    // Roles that can delete restuarnat
+    List<string> AUTHRoles = new List<string>() { "Admin" };
+
+    // current user role
+    string CurrRole = Session["AUTHRole"] as string;
+
+    // set selected tab
+    string navfoods = "";
+    if (!string.IsNullOrEmpty(ViewBag.tab))
+    {
+        navfoods = ViewBag.tab;
+    }
+
+    // message if any
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"]);
+    }
+}
+<head>
+    <!-- for modal -->
+    <link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        // function called on change in webgrid
+        function reloadPage() {
+            getModals();
+        }
+
+        function getModals() {
+            // ajax call to add food
+            $('.foodcreate').click(function () {
+                var $buttonClicked = $(this);
+                var restaurantID = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "false", show: true, keyboard: true }
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Restaurant/FoodItemCreate",
+                    data: { id: restaurantID },
+                    //dataType: "json",
+                    //contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#myFoodItemModalContent').html(data);
+                        $('#myFoodItemModal').modal(options);
+                        $('#myFoodItemModal').modal('show');
+                        $('.modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+
+                    },
+                    failure: function () {
+                        alert("Please try again.")
+                        location.reload();
+                    },
+                    error: function (request, status, error) {
+                        //alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                        alert("Please try later.")
+                        location.reload();
+                    }
+                })
+            })
+
+            // ajax call to update food item
+            $('.foodedit').click(function () {
+                var $buttonClicked = $(this);
+                var foodIDPK = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "false", show: true, keyboard: true };
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Restaurant/FoodItemUpdate",
+                    data: { id: foodIDPK },
+                    success: function (data) {
+                        $('#myFoodUpdateModalContent').html(data);
+                        $('#myFoodUpdateModal').modal(options);
+                        $('#myFoodUpdateModal').modal('show');
+                        $('.modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+                    },
+                    failure: function () {
+                        alert("Please try again.")
+                        location.reload();
+                    },
+                    error: function (request, stats, error) {
+                        //alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                        alert("Please try later.")
+                        location.reload();
+                    }
+                })
+            })
+        }
+
+        // get the ajax function on load and get the selected tab
+        $(function () {
+            getModals();
+
+            $('#restaurant-tabs').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+
+            // store current selected tab in hash value
+            $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+                var id = $(e.target).attr("href").substr(1);
+                window.location.hash = id;
+            });
+
+            var hash = window.location.hash;
+            var foodTabs = '@navfoods' != "nav-foods" ? false : true;
+
+            if (foodTabs == false) {
+                $('#restaurant-tabs a[href="' + hash + '"]').tab('show');
+            } else {
+                hash = "#nav-foods";
+                $('#restaurant-tabs a[href="'+ hash +'"]').tab('show');
+            }
+        })
+    </script>
+</head>
+<body>
+    <!-- FoodItem Create Modal -->
+    <div id="myFoodItemModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="myFoodItemModalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FoodItem Update Modal-->
+    <div id="myFoodUpdateModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="myFoodUpdateModalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="container-fluid">
+        <div id="tab-nav" class="col">
+            @Html.HiddenFor(Model => Model.Restaurant.RestaurantIDPK)
+            <h2>@Model.Restaurant.RestaurantName</h2>
+            <hr />
+
+            <!-- tabs -->
+            <ul class="nav nav-tabs" id="restaurant-tabs">
+                <li><a href="#nav-info" data-toggle="tab"><strong>Info</strong></a></li>
+                <li><a href="#nav-foods" data-toggle="tab"><strong>Foods</strong></a></li>
+                <li><a href="#nav-rating" data-toggle="tab"><strong>Ratings</strong></a></li>
+            </ul>
+
+
+            <!-- Restaurant info, foods, and ratings-->
+            <div class="tab-content clearfix">
+                <!-- Restaurant Data -->
+                <div class="tab-pane fade in active" id="nav-info">
+                    <table class="table" id="borderless">
+                        <tbody>
+                            <!-- Name -->
+                            <tr>
+                                <th class="col-md-2">Name</th>
+                                <td>@Model.Restaurant.RestaurantName</td>
+                            </tr>
+
+                            <!-- Delivery day-->
+                            <tr>
+                                <th>Delivery Day</th>
+                                <td>@Model.Restaurant.DayofWeek</td>
+                            </tr>
+
+                            <!-- Phone number-->
+                            <tr>
+                                <th>Contact</th>
+                                <td>@Model.Restaurant.Contact</td>
+                            </tr>
+
+                            <!-- any notice-->
+                            <tr>
+                                <th>Notice</th>
+                                <td>
+                                    <span>@(string.IsNullOrEmpty(Model.Restaurant.Notice) == true ? "None" : @Model.Restaurant.Notice)</span>
+                                </td>
+                            </tr>
+
+                            <!-- date registered-->
+                            <tr>
+                                <th>Date Created</th>
+                                <td>@Model.Restaurant.DateCreated</td>
+                            </tr>
+
+                            <!-- date updated-->
+                            <tr>
+                                <th>Date Modified</th>
+                                <td>@Model.Restaurant.DateModified</td>
+                            </tr>
+
+                            <!-- is active? not active?-->
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <span>@(Model.Restaurant.IsActive == 1 ? "Active" : "Inactive")</span>
+                                </td>
+                            </tr>
+
+                            <!-- sandwich restaurant? -->
+                            <tr>
+                                <th>Sandwich</th>
+                                <td>
+                                    <span>@(Model.Restaurant.IsSandwichRestaurant == 1 ? "Yes" : "No")</span>
+                                </td>
+                            </tr>
+
+                            <!-- show only for sandwich restaurant -->
+                            @if (Model.Restaurant.IsSandwichRestaurant == 1)
+                            {
+                                <tr>
+                                    <th>Sandwich Price</th>
+                                    <td>$@Model.Restaurant.SandwichPrice</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- buttons -->
+                    <div class="col-md-offset-1 dl-horizontal">
+                        <!-- update button-->
+                        @Html.ActionLink("Update", "RestaurantUpdate", "Restaurant", new { id = Model.Restaurant.RestaurantIDPK }, new { @class = "btn btn-primary btn-sm" })
+
+                        <!-- if current user is admin, show remove button -->
+                        @if (AUTHRoles.Contains(CurrRole))
+                        {
+                            @Html.ActionLink("Remove", "RestaurantRemove", "Restaurant", new { id = Model.Restaurant.RestaurantIDPK }, new { @class = "btn btn-danger btn-sm" })
+                        }
+
+                        <!-- Back to list button-->
+                        @Html.ActionLink("Back to List", "RestaurantList", null, new { @class = "btn btn-warning btn-sm" })
+                    </div>
+                </div>
+
+                <!-- Food items offered in Restaurant -->
+                <div class="tab-pane fade" id="nav-foods">
+
+                    <!-- Button to add food-->
+                    <div class="form-group-lg">
+                        @*@Html.ActionLink("Add Food", "FoodItemCreate", "Restaurant", new { @id = Model.Restaurant.RestaurantIDPK }, new { @type = "button", @class = "btn btn-primary btn-block" })*@
+                        <a href="javascript:void(0)" class="foodcreate btn btn-primary btn-block" , data-id="@Model.Restaurant.RestaurantIDPK">Add Food</a>
+                    </div>
+                    <hr />
+
+                    <!-- List of food items-->
+                    @{
+                        WebGrid grid = new WebGrid(null, ajaxUpdateContainerId: "grid", ajaxUpdateCallback: "reloadPage", rowsPerPage: Model.PageSize);
+                        grid.Bind(Model.FoodItemList, autoSortAndPage: true, rowCount: Model.PageSize);
+                    }
+                    <div id="grid">
+                        <!-- Search bar -->
+                        <div style="text-align:right;">
+                            @using (Html.BeginForm("RestaurantProfile", "Restaurant", new { id = Model.Restaurant.RestaurantIDPK }, FormMethod.Get))
+                            {
+                                <input type="text" name="searchString" id="searchString" maxlength="20" />
+                                <input class="btn btn-primary btn-sm" type="submit" id="btnSearch" value="Search" />
+
+                                <!-- button to reset search -->
+                                @Html.ActionLink("Reset", "RestaurantProfile", "Restaurant", new { id = Model.Restaurant.RestaurantIDPK, searchString = "reset" }, new { @type = "button", @class = "btn btn-primary btn-sm" })
+                            }
+                        </div>
+
+                        <!-- grid for list of food items-->
+                        @grid.GetHtml(tableStyle: "table table-ordered",
+                                      mode: WebGridPagerModes.All,
+
+                                      // Pagination
+                                      firstText: "<< First",
+                                      previousText: "< Prev",
+                                      nextText: "Next >",
+                                      lastText: "Last >>",
+
+                                      // add columns with headers and format values inside the grid
+                                      columns: grid.Columns(
+                                        grid.Column("", "No.", format: item => item.WebGrid.Rows.IndexOf(item) + 1),
+                                        grid.Column("FoodItemName", "Item Name"),
+                                        grid.Column("FoodTypeName", "Item Type"),
+                                        grid.Column("Price", "Price", format: @<text>@item.Price.ToString("#.00")</text>),
+                                        grid.Column("IngredientTypeName", "Ingredient Type"),
+                                        grid.Column("Description", "Description"),
+                                        grid.Column("", "", format: @<text><a href="javascript:void(0)" class="foodedit btn btn-warning btn-sm" , data-id="@item.FoodItemIDPK">Edit</a>
+                                                                             @Html.ActionLink("Remove", "FoodItemRemove", "Restaurant", new { @id = @item.FoodItemIDPK, @restaurantID = @item.RestaurantIDFK }, new { @class = "btn btn-danger btn-sm" })</text>)))
+                    </div>
+                </div>
+
+                <!-- Ratigs on orders in restaurant -->
+                <div class="tab-pane fade" id="nav-rating">
+                    <!-- Average and Number of reviews-->
+                    <h4>
+                        <span>Average: @(Model.RestaurantRating.RatingAverage == 0 ? "0" : @Model.RestaurantRating.RatingAverage.ToString("#.00"))</span>
+                    </h4>
+                    <h4>Number of Reviews: @Model.RestaurantRating.RatingCount</h4>
+
+                    <!-- List of ratings -->
+                    @{
+                        WebGrid gridRating = new WebGrid(null, ajaxUpdateContainerId: "gridRating", rowsPerPage: Model.PageSize);
+                        gridRating.Bind(Model.RatingList, autoSortAndPage: true, rowCount: Model.PageSize);
+
+                        // For ratings within 24 within hours, full date with time.
+                        // For other ratings, only date
+                        DateTime yesterday = DateTime.Now.AddDays(-1);
+                    }
+
+                    <div id="gridRating">
+                        @gridRating.GetHtml(tableStyle: "table table-ordred",
+                                mode: WebGridPagerModes.All,
+
+                                // Pagination
+                                firstText: "<< First",
+                                previousText: "< Prev",
+                                nextText: "Next >",
+                                lastText: "Last >>",
+
+                                 // add columns with headers and format values inside the grid
+                                columns: grid.Columns(
+                                    grid.Column("UserName", "Name", format: (item) => @Html.ActionLink((string)@item.UserName, "UserProfile", "User", new { @id = item.UserID }, new { @style = "color:black; font-weight:bold;" })),
+                                    grid.Column("Content", "Review"),
+                                    grid.Column("Score", "Score"),
+                                    grid.Column("DateCreated", "Date", format: @<text>@(item.DateCreated > yesterday ? @item.DateCreated : @item.DateCreated.ToShortDateString())</text>)))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+

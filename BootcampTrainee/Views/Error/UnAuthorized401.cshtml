@@ -1,0 +1,13 @@
+﻿<div class="row" style="height:500px; width:100%; text-align:center; margin-top:45px;">
+    <div class="col col-lg-1 col-lg-offset-1">
+        <!-- image -->
+        <img width="400" height="400" src="~/Images/401-man-w-exclamation.png" />
+    </div>
+    <div class="col col-lg-5 col-lg-offset-4" style="padding: 150px 0">
+        <!-- error message-->
+        @Html.Raw(ViewBag.message)
+        <br /><br />
+        <!-- button to main page-->
+        @Html.ActionLink("To Home", "Index", "Home", null, new { @type = "button", @class = "btn btn-primary" })
+    </div>
+</div>

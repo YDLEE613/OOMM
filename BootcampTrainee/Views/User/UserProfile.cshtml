@@ -1,0 +1,399 @@
+﻿@using BootcampTraineeDBObjects.Util
+@using System.Text.RegularExpressions
+
+@model UserRestaurantBoardUtil
+
+@{
+    // roles that can edit/remove other users
+    string RoleAdmin = "Admin";
+    string RoleManager = "Manager";
+    List<string> AuthRoles = new List<string> { RoleAdmin, RoleManager };
+
+    // current user role and id
+    string CurrRole = Session["AUTHRole"] as string;
+    int CurrUser = Convert.ToInt32(Session["AUTHUserIDPK"]);
+
+    // message if any
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"])
+    }
+}
+<head>
+    <!-- for modal -->
+    <link rel="stylesheet" type="text/css" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/blitzer/jquery-ui.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        $(function () {
+            // ajax calls 
+            reloadPage();
+
+            // show current tab
+            $('#user-tabs').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+
+            // store current selected tab in hash value
+            $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+                var id = $(e.target).attr("href").substr(1);
+                window.location.hash = id;
+            });
+
+            // change the tab after page load
+            var hash = window.location.hash;
+            $('#user-tabs a[href="' + hash + '"]').tab('show');
+
+
+        });
+        function reloadPage() {
+            // ajax call for order details
+            $(".fooditems").click(function () {
+                var $buttonClicked = $(this);
+                var orderID = $buttonClicked.attr('data-id')
+                var options = { "backdrop": "false", show: true, keyboard: true }
+
+                $.ajax({
+                    type: "GET",
+                    url: "/User/UserOrderDetails",
+                    contentType: "application/json; charset=utf-8",
+                    data: { id: orderID },
+                    datatype: "json",
+                    success: function (data) {
+                        $('#myFoodDetailModalContent').html(data);
+                        $('#myFoodDetailModal').modal(options);
+                        $('#myFoodDetailModal').modal('show');
+                        $('.modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                    }
+                })
+            })
+
+            // ajax call for rating
+            $(".foodrating").click(function () {
+                var $buttonClicked = $(this);
+                var orderID = $buttonClicked.attr('data-id')
+                var options = { "backdrop": "false", show: true, keyboard: true }
+
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "/User/UserOrderRating",
+                    contentType: "application/json; charset=utf-8",
+                    data: { id: orderID },
+                    datatype: "json",
+                    success: function (data) {
+                        $('#myRatingModalContent').html(data);
+                        $('#myRatingModal').modal(options);
+                        $('#myRatingModal').modal('show');
+                        $('.modal-dialog').draggable({
+                            handle: ".modal-header"
+                        });
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error)
+                    }
+                })
+            })
+        }
+    </script>
+</head>
+<body>
+
+
+    <!-- Food Detail modal -->
+    <div id="myFoodDetailModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="myFoodDetailModalContent">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating modal -->
+    <div id="myRatingModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="myRatingModalContent">
+                    <p>HAHA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Div for User Data, Order Data, Board Data-->
+    <div class="container-fluid">
+
+        <div id="tab-nav" class="col">
+            <h2>@Model.UserData.UserLogInID</h2>
+
+            <!-- navigation tab -->
+            <ul class="nav nav-tabs" id="user-tabs">
+                <li> <a href="#nav-info" data-toggle="tab"><strong>Info</strong></a></li>
+                <li><a href="#nav-order" data-toggle="tab"><strong>Order</strong></a></li>
+                <li><a href="#nav-board" data-toggle="tab"><strong>Board</strong></a></li>
+            </ul>
+
+            <!-- Body -->
+            <div class="tab-content clearfix">
+
+                <!-- User Info tab -->
+                <div class="tab-pane fade in active" id="nav-info">
+                    <div class="detailed-content col-md-4" id="content-info">
+                        <table class="table" id="borderless">
+                            <tbody>
+                                <!-- LogIn ID -->
+                                <tr>
+                                    <th>LogIn ID</th>
+                                    <td>@Model.UserData.UserLogInID</td>
+                                </tr>
+
+                                <!-- Name -->
+                                <tr>
+                                    <th>Name</th>
+                                    <td>@Model.UserData.UserFirstName  @Model.UserData.UserLastName (@Model.UserData.UserRoleName)</td>
+                                </tr>
+
+                                <!-- Date Of Birth-->
+                                <tr>
+                                    <th>Date Of Birth</th>
+                                    <td>@Model.UserData.UserBirth.ToShortDateString()</td>
+                                </tr>
+
+                                <!-- Email-->
+                                <tr>
+                                    <th>Email</th>
+                                    @if (string.IsNullOrEmpty(Model.UserData.UserEmail))
+                                    {
+                                        <td>Unknown</td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <strong><a href="mailto:@Model.UserData.UserEmail" style="color:black;">@Model.UserData.UserEmail</a></strong>
+                                        </td>
+                                    }
+                                </tr>
+
+                                <!-- Phone -->
+                                <tr>
+                                    <th>Phone</th>
+                                    <td>@(string.IsNullOrEmpty(Model.UserData.UserPhone) ? "Unknown" : @Model.UserData.UserPhone)</td>
+                                </tr>
+
+                                <!-- Date Created -->
+                                <tr>
+                                    <th>Registered on</th>
+                                    <td>@Model.UserData.UserDateCreated.ToString().Substring(0, 9).Trim()</td>
+                                </tr>
+
+                                <!-- Date Modified -->
+                                <tr>
+                                    <th>Modified on</th>
+                                    <td>@Model.UserData.UserDateModified.ToString().Substring(0, 9).Trim()</td>
+                                </tr>
+
+                                <!-- Status -->
+                                <tr>
+                                    <th>Status</th>
+                                    <td>@(Model.UserData.UserIsActive == 1 ? "Active" : "Inactive")</td>
+                                </tr>
+                                <!-- Role -->
+                                @if (AuthRoles.Contains(CurrRole))
+                                {
+                                    <tr>
+                                        <th>Role</th>
+                                        <td>@Model.UserData.UserRoleName</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="2" style="text-align:center;">
+
+                                        <!-- Show edit button if user is either admin or manager, or if user has same IDPK-->
+                                        <!-- If CurrRole is manager, and Model.RoleName is Admin, and the Admin is active, no button for edit-->
+                                        @if ((AuthRoles.Contains(CurrRole) || CurrUser == Model.UserData.UserIDPK) && !(CurrRole == RoleManager && Model.UserData.UserRoleName == RoleAdmin))
+                                        {
+                                            @Html.ActionLink("Edit", "UserUpdate", "User", new { @id = Model.UserData.UserIDPK }, new { @type = "button", @class = "btn btn-primary btn-sm" })
+                                        }
+
+                                        <!-- Show Reactive/Activate button only to admin and manager -->
+                                        <!-- If CurrRole is manager and Model.RoleName is Admin, no button for status change -->
+                                        @if (AuthRoles.Contains(CurrRole) && !(CurrRole == RoleManager && Model.UserData.UserRoleName == RoleAdmin && Model.UserData.UserIsActive == 1))
+                                        {
+                                            <!-- Activate/Deactivate button based on the user's status -->
+                                            if (Model.UserData.UserIsActive == 1)
+                                            {
+                                                @Html.ActionLink("Deactivate", "UserStatusUpdate", "User", new { @iUserID = Model.UserData.UserIDPK, @status = Model.UserData.UserIsActive },
+                                                                         new { @type = "button", @class = "btn btn-warning btn-sm", @style = "width:65px; text-align:left; padding-left:6px" })
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("Activate", "UserStatusUpdate", "User", new { @iUserID = Model.UserData.UserIDPK, @status = Model.UserData.UserIsActive },
+                                                                        new { @type = "button", @class = "btn btn-warning btn-sm" })
+                                            }
+                                        }
+
+                                        <!-- Show remove button only to admin -->
+                                        @if (CurrRole == RoleAdmin)
+                                        {
+                                            @Html.ActionLink("Remove", "UserRemove", "User", new { @iUserID = Model.UserData.UserIDPK }, new { @type = "button", @class = "btn btn-danger btn-sm" })
+                                        }
+                                    </td>
+                                </tr>
+
+                                <!-- Show button to user list only for admin and manager-->
+                                @if (AuthRoles.Contains(CurrRole))
+                                {
+                                    <tr>
+                                        <td colspan="2" style="text-align:center;">@Html.ActionLink("Back to List", "UserList", "User", null, new { @type = "button", @class = "btn btn-info btn-sm" })</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- User Orders -->
+                <div class="tab-pane fade" id="nav-order">
+                    @{
+                        // Webgrid initialization
+                        WebGrid gridOrder = new WebGrid(null, ajaxUpdateContainerId: "OrderGrid", ajaxUpdateCallback: "reloadPage", rowsPerPage: Model.PageSize);
+                        gridOrder.Bind(Model.OrderList, autoSortAndPage: true, rowCount: Model.PageSize);
+
+                        //For orders within 24 hours, full date and time
+                        //For other orders, only date
+                        DateTime yesterday = DateTime.Now.AddDays(-1);
+                    }
+                    <div class="detailed-content" id="order-info">
+
+                        <!-- No rate order button for users with different IDPK -->
+                        @if (CurrUser == Model.UserData.UserIDPK)
+                        {
+                            <!-- If user already rated no button to rate. If not, show rate button -->
+                            <div id="OrderGrid">
+                                @gridOrder.GetHtml(tableStyle: "table table-condensed", headerStyle: "text-center",
+                                    htmlAttributes: new { @id = "Order-WebGrid" },
+                                    mode: WebGridPagerModes.All,
+
+                                    // Pagination
+                                    firstText: "<< First",
+                                    previousText: "< Prev",
+                                    nextText: "Next >",
+                                    lastText: "Last >>",
+
+                                    // add columns with headers and format values inside the grid
+                                    columns: gridOrder.Columns(
+                                        gridOrder.Column(null, null, format: @<input type="hidden" name="IDHidden" value="@item.UserOrderIDPK" />),
+                                        gridOrder.Column("RestaurantName", "Restuarant", format: (item) => @Html.ActionLink((string)(item.RestaurantName), "RestaurantProfile", "Restaurant",
+                                                                                                         new { id = item.RestaurantIDFK }, new { @class = "btn", @style = "color:black; font-weight:bold" })),
+                                        gridOrder.Column("DateOrdered", "Date Ordered", format:@<text>@(@item.DateOrdered > yesterday ? @item.DateOrdered : @item.DateOrdered.ToShortDateString())</text>),
+                                        gridOrder.Column("UserNote", "Note"),
+                                        gridOrder.Column("Ordered", "", format:@<text><a class="fooditems btn btn-primary btn-sm" , data-id="@item.UserOrderIDPK">Order Detail</a></text>, canSort: false),
+                                        gridOrder.Column("", "", format: (item) =>
+                                        {
+                                            // if user hasn't rated order, show button for rating. If user already rated, show rating
+                                            if (item.OrderRating == 0)
+                                            {
+                                                return Html.Raw(string.Format("<text><a class='foodrating btn btn-primary btn-sm' , data-id='{0}'>Rate My Order</a></text>", @item.UserOrderIDPK));
+                                            }
+                                            else
+                                            {
+                                                return @item.OrderRating;
+                                            }
+                                        })))
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- No Rate order button -->
+                            <div id="OrderGrid">
+                                @gridOrder.GetHtml(tableStyle: "table table-condensed", headerStyle: "text-center",
+                                    htmlAttributes: new { @id = "Order-WebGrid" },
+                                    mode: WebGridPagerModes.All,
+
+                                    // Pagination
+                                    firstText: "<< First",
+                                    previousText: "< Prev",
+                                    nextText: "Next >",
+                                    lastText: "Last >>",
+
+                                    // add columns with headers and format values inside the grid
+                                    columns: gridOrder.Columns(
+                                        gridOrder.Column(null, null, format: @<input type="hidden" name="IDHidden" value="@item.UserOrderIDPK" />),
+                                        gridOrder.Column("RestaurantName", "Restuarant", format: (item) => @Html.ActionLink((string)(item.RestaurantName), "RestaurantProfile", "Restaurant",
+                                                                                                            new { id = item.RestaurantIDFK }, new { @class = "btn", @style = "color:black; font-weight:bold" })),
+                                        gridOrder.Column("DateOrdered", "Date Ordered", format:@<text>@(@item.DateOrdered > yesterday ? @item.DateOrdered : @item.DateOrdered.ToShortDateString())</text>),
+                                        gridOrder.Column("UserNote", "Note"),
+                                        gridOrder.Column("Ordered", "", format:@<text><a href="javascript:void(0)" class="fooditems btn btn-primary btn-sm" , data-id="@item.UserOrderIDPK">Order Detail</a></text>, canSort: false),
+                                        gridOrder.Column("Rating", "", format:@<text>@(@item.OrderRating.ToString() == "0" ? "No Rating" : @item.OrderRating.ToString())</text>)))
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- User Board -->
+                <div class="tab-pane fade" id="nav-board">
+                    @{
+                        // Initialize webgrid and bind data
+                        WebGrid gridBoard = new WebGrid(null, ajaxUpdateContainerId: "BoardGrid", rowsPerPage: Model.PageSize);
+                        gridBoard.Bind(Model.BoardList, autoSortAndPage: true, rowCount: Model.PageSize);
+                    }
+                    <!-- list of boards-->
+                    <div class="detailed-content" id="board-info">
+                        <h3 style="text-align:center; font-weight:bold;">Board</h3>
+                        <div id="BoardGrid">
+                            @gridBoard.GetHtml(tableStyle: "table table-condensed", headerStyle: "text-center",
+                             mode: WebGridPagerModes.All,
+
+                             // Pagination
+                             firstText: "<< First",
+                             previousText: "< Prev",
+                             nextText: "Next >",
+                             lastText: "Last >>",
+
+                             // add columns with headers and format values inside the grid
+                             columns: gridOrder.Columns(
+                                gridBoard.Column("Title", "Title", format: @<strong>@Html.ActionLink((string)item.Title, "BoardView", "Board", new { id = item.BoardIDPK }, new { @style = "color:black" })</strong>),
+                                gridBoard.Column("CategoryName", "Category"),
+                                gridBoard.Column("DateCreated", "Date Written", format:@<text>@(@item.DateCreated > yesterday ? @item.DateCreated : @item.DateCreated.ToShortDateString())</text>, canSort: false),
+                                gridBoard.Column("DateModified", "Date Modified", format:@<text>@(@item.DateModified > yesterday ? @item.DateModified : @item.DateModified.ToShortDateString())</text>)))
+                        </div>
+                    </div>
+
+
+                    <!-- list of comments -->
+                    <div class="detailed-content col-fixed" id="comment-info">
+                        @{
+                            WebGrid gridComment = new WebGrid(null, ajaxUpdateContainerId: "CommentGrid", rowsPerPage: Model.PageSize);
+                            gridComment.Bind(Model.BoardCommentList, autoSortAndPage: true, rowCount: Model.PageSize);
+                        }
+                        <h3 style="text-align:center; font-weight:bold;">Comment</h3>
+                        <div id="CommentGrid">
+                            @gridComment.GetHtml(tableStyle: "table table-condensed", headerStyle: "text-center",
+                             mode: WebGridPagerModes.All,
+
+                             // Pagination
+                             firstText: "<< First",
+                             previousText: "< Prev",
+                             nextText: "Next >",
+                             lastText: "Last >>",
+
+                             // add columns with headers and format values inside the grid
+                             columns: gridComment.Columns(
+                                gridComment.Column("Content", "Content", format: @<text>@(item.Content.Length > 120 ? item.Content.Substring(0, 120) + "..." : Regex.Replace(@item.Content, @"<(.|\n)*?>", string.Empty))</text>, canSort: false),
+                                gridComment.Column("", "", format: @<text>@Html.ActionLink("Check", "BoardView", "Board", new { id = @item.BoardIDFK }, new { @class = "btn btn-primary btn-sm" })</text>),
+                                gridComment.Column("DateModified", "Date Written", format:@<text>@(@item.DateModified > yesterday ? @item.DateModified : @item.DateModified.ToShortDateString())</text>)))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,183 @@
+﻿@using BootcampTrainee.Models.Util;
+@using BootcampTrainee.Models.SubModel;
+
+@model FoodItemsListUtilModel
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<script>
+    function confirmMessage() {
+        return confirm("You can't make changes after this point.\nAre you ready to submit?");
+    }
+</script>
+
+@{ 
+    if (!string.IsNullOrEmpty((string)TempData["msg"]))
+    {
+        @Html.Raw(TempData["msg"]);
+    }
+}
+@using (Html.BeginForm("OrderSelection", "Restaurant"))
+{
+
+    <div style="">
+        <div class="container">
+            <h1>@Model.RestaurantName</h1>
+            <h2>@Model.RestaurantNotice</h2>
+            <form method="post">
+                <div class="form-group">
+                    @Html.HiddenFor(Model => Model.RestaurantIDFK)
+                    @Html.HiddenFor(Model => Model.RestaurantName)
+                    @Html.HiddenFor(Model => Model.IsSandwichRestaurant)
+                    @Html.HiddenFor(Model => Model.PerSandwichPrice)
+                    @Html.HiddenFor(Model => Model.UserIDFK, new { Value = Convert.ToInt32(Session["AUTHUserIDPK"]) })
+
+                </div>
+
+                <!-- Is Sandwich!? -->
+                <!-- NO -->
+                @if (Model.IsSandwichRestaurant == 0)
+                {
+                    <!-- Entree  -->
+                    <div class="form-group">
+                        @Html.LabelFor(Model => Model.EntreeID)
+                        @Html.DropDownListFor(Model => Model.EntreeID, new SelectList(Model.EntreeList, "FoodItemIDPK", "FoodItemName"), "Select One", new { @id = "EntreeID", @class = "form-control" })
+                        @Html.Hidden("EntreeName", Model.EntreeName)
+                    </div>
+                    <hr />
+                    <!-- Side -->
+                    int counter = 1;
+                    int eachRow = 0;
+                    int numColumns = 3;
+                    <strong>Side</strong><br /><br />
+                    <table>
+                        <tr style="text-align:right;">
+                            @foreach (FoodItem each in @Model.SideList)
+                            {
+                                <td>
+                                    @Html.HiddenFor(Model => Model.SideList[eachRow].FoodItemIDPK)
+                                    @Html.HiddenFor(Model => Model.SideList[eachRow].FoodItemName)
+                                    @Html.LabelFor(Model => Model.SideList[eachRow].IsSelected, Model.SideList[eachRow].FoodItemName)
+                                    @Html.CheckBoxFor(Model => Model.SideList[eachRow].IsSelected, new { @class = "" })
+                                </td>
+
+                                if (counter % numColumns == 0)
+                                {
+                                @:</tr>
+                                @:<tr style="text-align:right;">
+                                }
+
+                                eachRow++;
+                                counter++;
+                            }
+                        </tr>
+                    </table>
+                    <hr />
+                    <!-- Beverage -->
+                    <div class="form-group">
+                        @Html.LabelFor(Model => Model.BeverageID)
+                        @Html.DropDownListFor(Model => Model.BeverageID, new SelectList(Model.BeverageList, "FoodItemIDPK", "FoodItemName"), "None", new { @id = "BeverageID", @class = "form-control" })
+                        @*@Html.HiddenFor(Model => Model.BeverageList)*@
+                        @Html.Hidden("BeverageName", Model.BeverageName)
+                    </div>
+
+                }
+                else  // Yes - Sandwich
+                {
+
+                    <!-- Cheese -->
+                    <div class="form-group">
+                        @Html.LabelFor(Model => Model.CheeseID)
+                        @Html.DropDownListFor(Model => Model.CheeseID, new SelectList(Model.CheeseList, "FoodItemIDPK", "FoodItemName"), "Select One", new { @id = "CheeseID", @class = "form-control" })
+                        @Html.Hidden("CheeseName", Model.CheeseName)
+                    </div>
+
+                    <!-- Meat -->
+                    <div class="form-group">
+                        @Html.LabelFor(Model => Model.MeatID)
+                        @Html.DropDownListFor(Model => Model.MeatID, new SelectList(Model.MeatList, "FoodItemIDPK", "FoodItemName"), "Select One", new { @id = "MeatID", @class = "form-control" })
+                        @Html.Hidden("MeatName", Model.MeatName)
+                    </div>
+
+                    <!-- Bread -->
+                    <div class="form-group">
+                        @Html.LabelFor(Model => Model.BreadID)
+                        @Html.DropDownListFor(Model => Model.BreadID, new SelectList(Model.BreadList, "FoodItemIDPK", "FoodItemName"), "Select One", new { @id = "BreadID", @class = "form-control" })
+                        @Html.Hidden("BreadName", Model.BreadName)
+                    </div>
+
+                    <!-- Veggie -->
+                    <strong>Veggie</strong>
+                    <div class="form-group">
+                        @{
+                            int index = 0;
+                            foreach (var each in Model.VeggieList)
+                            {
+                                @Html.LabelFor(Model => Model.VeggieList[index].IsSelected, Model.VeggieList[index].FoodItemName)
+                                @Html.HiddenFor(Model => Model.VeggieList[index].FoodItemIDPK)
+                                @Html.HiddenFor(Model => Model.VeggieList[index].FoodItemName)
+                                @Html.CheckBoxFor(Model => Model.VeggieList[index].IsSelected, new { @class = "" })
+                                index++;
+                            }
+                        }
+                    </div>
+
+                    <!-- Condiment -->
+                    <strong>Condimenet</strong>
+                    <div class="form-group">
+                        @{
+                            index = 0;
+                            foreach (var each in Model.CondimentList)
+                            {
+                                @Html.LabelFor(Model => Model.CondimentList[index].IsSelected, Model.CondimentList[index].FoodItemName)
+                                @Html.HiddenFor(Model => Model.CondimentList[index].FoodItemIDPK)
+                                @Html.HiddenFor(Model => Model.CondimentList[index].FoodItemName)
+                                @Html.CheckBoxFor(Model => Model.CondimentList[index].IsSelected, new { @class = "" })
+                                index++;
+                            }
+                        }
+                    </div>
+                }
+
+                <!-- Special instruction -->
+                @Html.LabelFor(Model => Model.UserNote)
+                @Html.TextAreaFor(Model => Model.UserNote, new { @class = "form-control" , @maxlength="200"})
+
+                <hr />
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary" id="order-confirm" onclick="javascript: return confirmMessage();">Order</button>
+            </form>
+            <!-- Cancel button -->
+            @Html.ActionLink("Back", "Index", "Restaurant", null, new { @class = "btn btn-danger" })
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $("#EntreeID").change(function (event) {
+                $("#EntreeName").val($("#EntreeID option:selected").text().trim());
+            });
+
+            $("#BeverageID").change(function (event) {
+                $("#BeverageName").val($("#BeverageID option:selected").text().trim());
+            });
+
+            $("#CheeseID").change(function (event) {
+                $("#CheeseName").val($("#CheeseID option:selected").text().trim());
+            });
+
+            $("#MeatID").change(function (event) {
+                $("#MeatName").val($("#MeatID option:selected").text().trim());
+            });
+
+            $("#BreadID").change(function (event) {
+                $("#BreadName").val($("#BreadID option:selected").text().trim());
+            });
+        });
+
+    </script>
+}
+
+

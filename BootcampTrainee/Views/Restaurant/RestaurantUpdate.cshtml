@@ -1,0 +1,127 @@
+﻿@using BootcampTrainee.Models
+@model Restaurant
+
+@{
+    ViewBag.Title = "RestaurantUpdate";
+}
+
+<h2>@Model.RestaurantName</h2>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function showPrice() {
+        if (document.getElementById('is-sandwich-restaurant-checked').checked) {
+            document.getElementById('price-field').style.display = 'block';
+        } else if (document.getElementById('is-sandwich-restaurant-unchecked').checked) {
+            document.getElementById('price-field').style.display = 'none';
+        }
+    }
+</script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(Model => Model.RestaurantIDPK)
+
+        <!-- Restaurant Name -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.RestaurantName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RestaurantName, new { htmlAttributes = new { @class = "form-control", maxlength="20" } })
+                @Html.ValidationMessageFor(model => model.RestaurantName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Day of week -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.DayofWeek, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(Model => Model.DayofWeek, new SelectList(Model.DayList), "Select One", new { @class = "form-control" })
+
+                @*@Html.EditorFor(model => model.DayofWeek, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DayofWeek, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Contact, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control", maxlength="10" } })
+                @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Notice, htmlAttributes: new { @class = "col-md-offset-1 col-md-1", @style = "padding-left:35px;" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Notice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Notice (Optional)", maxlength="50" } })
+                @Html.ValidationMessageFor(model => model.Notice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @if (Model.IsActive == 1)
+                {
+                    @Html.RadioButtonFor(Model => Model.IsActive, 1, new { Checked = "checked" }) @Html.Label("Yes")
+                    @Html.RadioButtonFor(Model => Model.IsActive, 0, new { style = "margin-left:30px" }) @Html.Label("No")
+                }
+                else
+                {
+                    @Html.RadioButtonFor(Model => Model.IsActive, 1, new { }) @Html.Label("Yes")
+                    @Html.RadioButtonFor(Model => Model.IsActive, 0, new { Checked = "checked", style = "margin-left:30px" }) @Html.Label("No")
+                }
+
+            </div>
+        </div>
+
+        <!-- Is Sandwich -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsSandwichRestaurant, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @if (Model.IsSandwichRestaurant == 1)
+                {
+                    @Html.RadioButtonFor(Model => Model.IsSandwichRestaurant, 1, new { Checked = "checked", @id = "is-sandwich-restaurant-checked", onclick = "javascript:showPrice();" }) @Html.Label("Yes", new { style = "margin-right:30px" })
+                    @Html.RadioButtonFor(Model => Model.IsSandwichRestaurant, 0, new { @id = "is-sandwich-restaurant-unchecked", onclick = "javacsript:showPrice();" })@Html.Label("No")
+                }
+                else
+                {
+                    @Html.RadioButtonFor(Model => Model.IsSandwichRestaurant, 1, new { @id = "is-sandwich-restaurant-checked", onclick = "javascript:showPrice();" }) @Html.Label("Yes", new { style = "margin-right:30px" })
+                    @Html.RadioButtonFor(Model => Model.IsSandwichRestaurant, 0, new { Checked = "checked", @id = "is-sandwich-restaurant-unchecked", onclick = "javacsript:showPrice();" })@Html.Label("No")
+
+
+                }
+            </div>
+        </div>
+
+        <!-- Price for a sandwich -->
+        <div class="form-group" id="price-field" style="@(Model.RestaurantIDPK == 1? Html.Raw("display:block"): Html.Raw("display:none"))">
+            @Html.LabelFor(Model => Model.SandwichPrice, htmlAttributes: new { @class = "col-md-1 col-md-offset-1" })
+            <div class="col-md-10">
+                @Html.EditorFor(Model => Model.SandwichPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(Model => Model.SandwichPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <!-- Buttons -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Back to List", "RestaurantList", null, new { @class = "btn btn-warning" })
+            </div>
+        </div>
+    </div>
+}
+

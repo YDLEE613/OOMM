@@ -1,0 +1,340 @@
+{
+  "Errors": [
+    {
+      "Source": ".Net SqlClient Data Provider",
+      "Number": 201,
+      "State": 4,
+      "Class": 16,
+      "Server": ".\\SQLEXPRESS",
+      "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+      "Procedure": "sp_CreateExceptionLog",
+      "LineNumber": 0
+    }
+  ],
+  "ClientConnectionId": "b9359252-b569-410a-aed5-6b0e07d7ad00",
+  "ClassName": "System.Data.SqlClient.SqlException",
+  "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+  "Data": {
+    "HelpLink.ProdName": "Microsoft SQL Server",
+    "HelpLink.ProdVer": "14.00.1000",
+    "HelpLink.EvtSrc": "MSSQLServer",
+    "HelpLink.EvtID": "201",
+    "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+    "HelpLink.LinkId": "20476"
+  },
+  "InnerException": null,
+  "HelpURL": null,
+  "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 47",
+  "RemoteStackTraceString": null,
+  "RemoteStackIndex": 0,
+  "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+  "HResult": -2146232060,
+  "Source": ".Net SqlClient Data Provider",
+  "WatsonBuckets": null,
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "ca1ccf8a-0fb0-4094-a98b-a82aae492b1b",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 47",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "9b4df985-04cb-4ebc-bc86-e510165e5a14",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 47",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "ab8a40a8-175a-41af-a059-b407ffa2577c",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 47",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "a8af6d03-15b4-4d08-88a7-a1e884146f9a",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 47",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "6d64c692-1d37-487a-aaa2-fd77fb79ef5a",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 48",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "d03c7f32-83e2-4c3a-9976-33b765ca63e0",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 43",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "2029e188-fce4-4084-b957-a7d89c11d17e",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 43",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "8bef32d2-2227-45ab-a323-f9d83be02525",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 43",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  },
+  {
+    "Errors": [
+      {
+        "Source": ".Net SqlClient Data Provider",
+        "Number": 201,
+        "State": 4,
+        "Class": 16,
+        "Server": ".\\SQLEXPRESS",
+        "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+        "Procedure": "sp_CreateExceptionLog",
+        "LineNumber": 0
+      }
+    ],
+    "ClientConnectionId": "acd9191f-6173-4b3a-ac7c-d27a259c46ea",
+    "ClassName": "System.Data.SqlClient.SqlException",
+    "Message": "Procedure or function 'sp_CreateExceptionLog' expects parameter '@parm_exception_url', which was not supplied.",
+    "Data": {
+      "HelpLink.ProdName": "Microsoft SQL Server",
+      "HelpLink.ProdVer": "14.00.1000",
+      "HelpLink.EvtSrc": "MSSQLServer",
+      "HelpLink.EvtID": "201",
+      "HelpLink.BaseHelpUrl": "http://go.microsoft.com/fwlink",
+      "HelpLink.LinkId": "20476"
+    },
+    "InnerException": null,
+    "HelpURL": null,
+    "StackTraceString": "   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\r\n   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\r\n   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)\r\n   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()\r\n   at BootcampTraineeDAL.ExceptionDAL.CreateExceptionLog(Exception iException) in C:\\Users\\Admin-2\\source\\repos\\BootcampTrainee\\BootcampTraineeDAL\\ExceptionDAL.cs:line 43",
+    "RemoteStackTraceString": null,
+    "RemoteStackIndex": 0,
+    "ExceptionMethod": "8\nOnError\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlConnection\nVoid OnError(System.Data.SqlClient.SqlException, Boolean, System.Action`1[System.Action])",
+    "HResult": -2146232060,
+    "Source": ".Net SqlClient Data Provider",
+    "WatsonBuckets": null
+  }
+}
