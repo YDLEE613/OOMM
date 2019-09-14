@@ -12,7 +12,7 @@
     /// </summary>
     public class ExceptionDAL
     {
-        //string lConnectionString = "Server=DESKTOP-H52G7QL\\SQLEXPRESS;Database=OnshoreCapstone;Trusted_Connection=True;";
+        //string lConnectionString = "Server=LAPTOP-VC1M94MC\\SQLEXPRESS01;Database=OnshoreCapstone;Trusted_Connection=True;";
         private string lConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
 
         /// <summary>
@@ -59,7 +59,7 @@
         {
             // serialize exception into json with indentation
             string lJson = JsonConvert.SerializeObject(iException, Formatting.Indented);
-            string path = @"C:\Users\Admin-2\source\repos\BootcampTrainee\BootcampTraineeDAL\ErrorLog\errors.txt";
+            string path = @"C:\Users\donny\source\repos\OOMM\BootcampTraineeDAL\ErrorLog\errors.txt";
 
             // write into file
             StreamWriter writer = new StreamWriter(path, true);

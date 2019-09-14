@@ -13,7 +13,7 @@
     public class BoardCommentDAL
     {
         // connection string to database
-        //string lConnectionString = "Server=DESKTOP-H52G7QL\\SQLEXPRESS;Database=OnshoreCapstone;Trusted_Connection=True;";
+        //string lConnectionString = "Server=LAPTOP-VC1M94MC\\SQLEXPRESS01;Database=OnshoreCapstone;Trusted_Connection=True;";
         private string lConnectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ConnectionString;
 
         /// <summary>
