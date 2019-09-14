@@ -53,25 +53,25 @@
 
             // The user already ordered, return to restaurant index page with message
             if (AlreadyOrdered)
-            {
-                // message for user
-                TempData["msg"] = "<script>alert('You have already ordered!');</script>";
-                return RedirectToAction("Index", "Restaurant");
-            }
-            else if (lDayOfWeek != today)
-            {
-                if (lDayOfWeek > today)
-                {
-                    // message for trying to order for future
-                    TempData["msg"] = "<script>alert('You cannot order today.');</script>";
-                }
-                else
-                {
-                    // message for past day
-                    TempData["msg"] = "<script>alert('You can order next week.');</script>";
-                }
+             {
+                 // message for user
+                 TempData["msg"] = "<script>alert('You have already ordered!');</script>";
+                 return RedirectToAction("Index", "Restaurant");
+             }
+             else if (lDayOfWeek != today)
+             {
+                 if (lDayOfWeek > today)
+                 {
+                     // message for trying to order for future
+                     TempData["msg"] = "<script>alert('You cannot order today.');</script>";
+                 }
+                 else
+                 {
+                     // message for past day
+                     TempData["msg"] = "<script>alert('You can order next week.');</script>";
+                 }
 
-                return RedirectToAction("Index", "Restaurant");
+                 return RedirectToAction("Index", "Restaurant");
             }
 
             // Instantiate FoodItemListUtil object
