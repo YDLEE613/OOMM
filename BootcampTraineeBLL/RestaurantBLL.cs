@@ -8,6 +8,7 @@
     using BootcampTraineeDBObjects.Util;
     using BootcampTraineeBLL.Util;
     using BootcampTraineeDAL;
+    using System.Net.Mail;
 
     /// <summary>
     /// This class manages calling methods in DAL, and getting and returning values fom DAL
@@ -602,6 +603,93 @@
             int lDayOfWeek = lRestaurantDAL.FindDayOfDelieveryByRestaurantID(id);
 
             return lDayOfWeek;
+        }
+
+        /// <summary>
+        /// Description: This method sends orders to restaurant email
+        /// </summary>
+        /// <param name="id">A unique restaurant id</param>
+        /// <returns>If successfully sent, return true, otherwise false</returns>
+        public bool sendOrdersByRestaurantID(int id)
+        {
+            string email = FindRestaurantByRestaurantID(id).Email;
+            List<UserOrderDBO> userOrders = GetAllRecentOrdersByRestaurantID(id);
+            bool isSent = sendOrders(email, userOrders);
+
+            return isSent;
+        }
+
+        /// <summary>
+        /// Description: Helper method for sendOrdersByRestaurantID
+        /// </summary>
+        /// <param name="email">Restaurant Email</param>
+        /// <param name="userOrders">list of user orders</param>
+        /// <returns>IF successfully sent, return true. Otherwise false</returns>
+        public bool sendOrders(string email, List<UserOrderDBO> userOrders) {
+            bool isSent = false;
+
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+                mail.From = new MailAddress("lydmah1130@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = generateSubject();
+                mail.Body = getOrderDetails(userOrders);
+
+                SmtpServer.Port = 25;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("lydmah1130@gmail.com", "8001Donn!");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+                isSent = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+
+            return isSent;
+        }
+
+        /// <summary>
+        /// Description: This method retrieves orders and make them into string
+        /// </summary>
+        public string getOrderDetails(List<UserOrderDBO> userOrders)
+        {
+            string orders = "";
+
+            foreach(UserOrderDBO each in userOrders){
+                orders += "Name: " + each.UserName + "\n"
+                       + "Note: " + each.UserNote + "\n"
+                       + "Orders: " + getFoodItems(each.FoodItemList)+ "\n"
+                       + "Date: " + each.DateOrdered +"\n\n";
+            }
+
+            return orders;
+        }
+
+        /// <summary>
+        /// Description: This method returns list of items as string
+        /// </summary>
+        public string getFoodItems(List<FoodItemDBO> foodItems)
+        {
+            string items = "";
+
+            foreach(FoodItemDBO each in foodItems)
+            {
+                items += each.FoodItemName + ", ";
+            }
+
+            return items;
+        }
+            
+        /// <summary>
+        /// Description: This method returns subject for email
+        /// </summary>
+        public string generateSubject()
+        {
+            return DateTime.Today + " order from Onshore Bootcamp";
         }
     }
 }

@@ -27,10 +27,6 @@
         [RegularExpression("^[0-9]*$", ErrorMessage = "Contact number must be numeric.")]
         public string Contact { get; set; }
 
-        public string Notice { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
-
         [EmailAddress]
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
@@ -38,6 +34,10 @@
                             ErrorMessage = "Not in proper format")]
         public string Email { get; set; }
 
+        public string Notice { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        
         [Required]
         [Display(Name = "Is active?")]
         public int IsActive { get; set; }

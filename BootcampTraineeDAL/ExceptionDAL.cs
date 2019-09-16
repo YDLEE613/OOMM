@@ -59,7 +59,7 @@
         {
             // serialize exception into json with indentation
             string lJson = JsonConvert.SerializeObject(iException, Formatting.Indented);
-            string path = @"C:\Users\donny\source\repos\OOMM\BootcampTraineeDAL\ErrorLog\errors.txt";
+            string path = @".\ErrorLog\errors.txt";
 
             // write into file
             StreamWriter writer = new StreamWriter(path, true);

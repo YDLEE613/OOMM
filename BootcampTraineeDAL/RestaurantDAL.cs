@@ -51,6 +51,7 @@
                                 lRestaurantDBO.RestaurantName = (string)lReader["restaurant_name"];
                                 lRestaurantDBO.DayofWeek = (string)lReader["day_of_week"];
                                 lRestaurantDBO.Contact = (string)lReader["contact"];
+                                lRestaurantDBO.Email = (string)lReader["email"];
                                 lRestaurantDBO.DateCreated = (DateTime)lReader["date_created"];
                                 lRestaurantDBO.DateModified = (DateTime)lReader["date_modified"];
                                 lRestaurantDBO.IsActive = Convert.ToInt32(lReader["is_active"]);
@@ -683,6 +684,7 @@
                                 lRestaurantDBO.RestaurantName = (string)lReader["restaurant_name"];
                                 lRestaurantDBO.DayofWeek = (string)lReader["day_of_week"];
                                 lRestaurantDBO.Contact = (string)lReader["contact"];
+                                lRestaurantDBO.Email = (string)lReader["email"];
                                 lRestaurantDBO.DateCreated = (DateTime)lReader["date_created"];
                                 lRestaurantDBO.DateModified = (DateTime)lReader["date_modified"];
                                 lRestaurantDBO.IsActive = Convert.ToInt32(lReader["is_active"]);
@@ -983,6 +985,7 @@
                                 lRestaurantDBO.RestaurantName = (string)lReader["restaurant_name"];
                                 lRestaurantDBO.DayofWeek = (string)lReader["day_of_week"];
                                 lRestaurantDBO.Contact = (string)lReader["contact"];
+                                lRestaurantDBO.Email = (string)lReader["email"];
                                 lRestaurantDBO.DateCreated = (DateTime)lReader["date_created"];
                                 lRestaurantDBO.DateModified = (DateTime)lReader["date_modified"];
                                 lRestaurantDBO.IsActive = Convert.ToInt32(lReader["is_active"]);
@@ -1034,6 +1037,7 @@
                         lComm.Parameters.AddWithValue("@parm_restaurant_name", SqlDbType.Int).Value = iRestaurant.RestaurantName;
                         lComm.Parameters.AddWithValue("@parm_day_of_week", SqlDbType.VarChar).Value = iRestaurant.DayofWeek;
                         lComm.Parameters.AddWithValue("@parm_contact", SqlDbType.VarChar).Value = iRestaurant.Contact;
+                        lComm.Parameters.AddWithValue("@parm_email", SqlDbType.VarChar).Value = iRestaurant.Email;
                         lComm.Parameters.AddWithValue("@parm_is_active", SqlDbType.Bit).Value = iRestaurant.IsActive;
                         lComm.Parameters.AddWithValue("@parm_is_sandwich_restaurant", SqlDbType.Int).Value = iRestaurant.IsSandwichRestaurant;
 
@@ -1102,6 +1106,7 @@
                         lComm.Parameters.AddWithValue("@parm_restaurant_name", SqlDbType.VarChar).Value = iRestaurant.RestaurantName;
                         lComm.Parameters.AddWithValue("@parm_day_of_week", SqlDbType.VarChar).Value = iRestaurant.DayofWeek;
                         lComm.Parameters.AddWithValue("@parm_contact", SqlDbType.VarChar).Value = iRestaurant.Contact;
+                        lComm.Parameters.AddWithValue("@parm_email", SqlDbType.VarChar).Value = iRestaurant.Email;
                         lComm.Parameters.AddWithValue("@parm_is_active", SqlDbType.Bit).Value = iRestaurant.IsActive;
                         lComm.Parameters.AddWithValue("@parm_is_sandwich_restaurant", SqlDbType.Bit).Value = iRestaurant.IsSandwichRestaurant;
                         lComm.Parameters.AddWithValue("@parm_sandwich_price", SqlDbType.Decimal).Value = iRestaurant.SandwichPrice;
