@@ -85,6 +85,27 @@
                 }
             })
         })
+        $('.sendorders').click(function () {
+            var $buttonClicked = $(this);
+            var restaurantID = $buttonClicked.attr('data-id')
+            var options = { "backdrop": "false", show: true, keyboard: true }
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Restaurant/SendOrders",
+                data: { id: restaurantID },
+                success: function (data) {
+
+                },
+                failure: function () {
+
+                },
+                error: function (request, status, error) {
+
+                }
+            })
+        })
     })
 </script>
 
@@ -178,6 +199,15 @@
                             </td>
                         }
                     </tr>
+                    <tr>
+                        <!-- button for each restaurant -->
+                        @foreach(RestaurantDBO each in Model)
+                        {
+                            <td>
+                                <a href='javascript:void(0)' class="sendorders btn btn-primary" data-id='@each.RestaurantIDPK'>Send Orders</a>
+                            </td>
+                        }
+                    </tr>
                 }
                 else
                 {
@@ -192,9 +222,6 @@
                     </tr>
                 }
             </tfoot>
-
-            <!-- show button the check ratings only to trainees-->
-
         </table>
     </div>
 </div>

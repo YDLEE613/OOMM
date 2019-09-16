@@ -13,6 +13,7 @@
     using BootcampTraineeDBObjects.SubDBO;
     using BootcampTrainee.Mapper;
     using BootcampTrainee.Filters;
+    using System.Net.Mail;
 
     /// <summary>
     /// This class manages GET and POST actions regarding Restaurant
@@ -666,6 +667,18 @@
             List<UserOrderRatingDBO> lUserOrderRating = lRestaurantBLL.GetTopRatedOrdersByRestaurantID(id);
 
             return PartialView(lUserOrderRating);
+        }
+
+        [HttpPost]
+        [MustBeLoggedIn]
+        public ActionResult SendOrders(int id)
+        {
+            // Instantiate Object
+            RestaurantBLL lRestaurantBLL = new RestaurantBLL();
+
+            bool isSent = lRestaurantBLL.sendOrdersByRestaurantID(id);
+
+            return PartialView();
         }
     }
 }

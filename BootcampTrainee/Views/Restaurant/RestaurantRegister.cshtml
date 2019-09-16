@@ -56,6 +56,16 @@
                 @Html.ValidationMessageFor(Model => Model.Contact, "", new { @class = "text-danger" })
             </div>
 
+            <!-- Email -->
+            <label class="control-label">
+                @Html.LabelFor(Model => Model.Email)
+            </label>
+            <div class="input-group form-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                @Html.EditorFor(Model=>Model.Email, new {htmlAttributes = new { @class="form-control", @placeholder = "Enter Email "}})
+                @Html.ValidationMessageFor(Model => Model.Email, "", new { @class = "text-danger"})
+            </div>
+
             <!-- Notice -->
             @Html.LabelFor(Model => Model.Notice)
             <div class="input-group form-group">

@@ -169,6 +169,7 @@
             lRestaurant.RestaurantName = iRestaurantDBO.RestaurantName;
             lRestaurant.DayofWeek = iRestaurantDBO.DayofWeek;
             lRestaurant.Contact = iRestaurantDBO.Contact;
+            lRestaurant.Email = iRestaurantDBO.Email;
             lRestaurant.Notice = iRestaurantDBO.Notice;
             lRestaurant.DateCreated = iRestaurantDBO.DateCreated;
             lRestaurant.DateModified = iRestaurantDBO.DateModified;
@@ -374,6 +375,7 @@
             lRestaurantDBO.RestaurantName = iRestaurant.RestaurantName;
             lRestaurantDBO.DayofWeek = iRestaurant.DayofWeek;
             lRestaurantDBO.Contact = iRestaurant.Contact;
+            lRestaurantDBO.Email = iRestaurant.Email;
             lRestaurantDBO.Notice = iRestaurant.Notice;
             lRestaurantDBO.IsActive = iRestaurant.IsActive;
             lRestaurantDBO.IsSandwichRestaurant = iRestaurant.IsSandwichRestaurant;
