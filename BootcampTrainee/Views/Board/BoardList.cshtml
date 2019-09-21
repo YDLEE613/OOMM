@@ -131,7 +131,7 @@
                             grid.Column("UserName", "Author", format:@<strong>@Html.ActionLink((string)item.UserName, "UserProfile", "User", new { @id = item.UserIDFK }, new { @style = "color:black" })</strong>, style: "board-author mark-text"),
                             grid.Column("DateModified", "Written", format:@<text>@(@item.DateModified > yesterday ? @item.DateModified : @item.DateModified.ToShortDateString())</text>, style: "board-written mark-text"),
                             grid.Column("CategoryName", "Category", style: "board-category"),
-                            grid.Column("", "", format:@<text>@Html.ActionLink("Remove", "BoardRemove", "Board", new { @id = item.BoardIDPK }, new { @class = "btn btn-danger btn-sm" })</text>),
+                            grid.Column("", "", format:@<text>@Html.ActionLink("Remove", "BoardRemove", "Board", new { @id = item.BoardIDPK }, new { @class = "btn btn-danger btn-sm", onclick= "return confirm('Are you sure to remove this post?');" })</text>),
                             grid.Column("", "", format:@<text><span style="visibility:hidden">@item.IsFixed</span></text>)))
                 </div>
             </div>

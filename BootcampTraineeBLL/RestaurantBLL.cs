@@ -614,6 +614,7 @@
         {
             string email = FindRestaurantByRestaurantID(id).Email;
             List<UserOrderDBO> userOrders = GetAllRecentOrdersByRestaurantID(id);
+
             bool isSent = sendOrders(email, userOrders);
 
             return isSent;

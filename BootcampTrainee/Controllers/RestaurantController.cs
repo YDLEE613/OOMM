@@ -50,7 +50,7 @@
             int today = (int)DateTime.Now.DayOfWeek;
 
             // Check if it is the first order for the restaurant of the current user this week
-            bool AlreadyOrdered = lRestaurantBLL.FindOrderCountThisWeekByUserIDAndRestaurantID(lUserIDFK, id);
+           /* bool AlreadyOrdered = lRestaurantBLL.FindOrderCountThisWeekByUserIDAndRestaurantID(lUserIDFK, id);
 
             // The user already ordered, return to restaurant index page with message
             if (AlreadyOrdered)
@@ -73,7 +73,7 @@
                 }
 
                 return RedirectToAction("Index", "Restaurant");
-            }
+            }*/
 
             // Instantiate FoodItemListUtil object
             FoodItemsListUtil lFoodItemsListUtil = new FoodItemsListUtil();
