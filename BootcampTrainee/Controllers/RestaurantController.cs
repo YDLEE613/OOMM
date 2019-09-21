@@ -62,15 +62,15 @@
             else if (lDayOfWeek != today)
             {
                 if (lDayOfWeek > today)
-                {
-                    // message for trying to order for future
-                    TempData["msg"] = "<script>alert('You cannot order today.');</script>";
-                }
-                else
-                {
-                    // message for past day
-                    TempData["msg"] = "<script>alert('You can order next week.');</script>";
-                }
+            {
+            // message for trying to order for future
+            TempData["msg"] = "<script>alert('You cannot order today.');</script>";
+            }
+            else
+            {
+            // message for past day
+            TempData["msg"] = "<script>alert('You can order next week.');</script>";
+            }
 
                 return RedirectToAction("Index", "Restaurant");
             }
