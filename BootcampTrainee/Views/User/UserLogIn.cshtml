@@ -25,12 +25,12 @@
 
                         <!-- User LogIn ID -->
                         <div class="form-group">
-                            @Html.TextBoxFor(Model => Model.UserLogInID, new { @Value = id, @class = "form-control", @placeholder = "Username", @maxlength = "50" })
+                            @Html.TextBoxFor(Model => Model.UserLogInID, new { @Value = "SuperAdmin", @class = "form-control", @placeholder = "Username", @maxlength = "50" })
                         </div>
 
                         <!-- User Password -->
                         <div class="form-group">
-                            @Html.TextBoxFor(Model => Model.UserPassword, new { @Value = password, @class = "form-control", @placeholder = "Password", @type = "password", @maxlength = "20" })
+                            @Html.TextBoxFor(Model => Model.UserPassword, new { @Value = "SsuperAdmin1!", @class = "form-control", @placeholder = "Password", @type = "password", @maxlength = "20" })
                         </div>
 
                         <!-- button to sign in-->

@@ -242,7 +242,7 @@
                         <!-- if current user is admin, show remove button -->
                         @if (AUTHRoles.Contains(CurrRole))
                         {
-                            @Html.ActionLink("Remove", "RestaurantRemove", "Restaurant", new { id = Model.Restaurant.RestaurantIDPK }, new { @class = "btn btn-danger btn-sm" })
+                            @Html.ActionLink("Remove", "RestaurantRemove", "Restaurant", new { id = Model.Restaurant.RestaurantIDPK }, new { @class = "btn btn-danger btn-sm", onclick= "return confirm('Are you sure to remove this restaurant?');"  })
                         }
 
                         <!-- Back to list button-->
@@ -297,7 +297,7 @@
                                         grid.Column("IngredientTypeName", "Ingredient Type"),
                                         grid.Column("Description", "Description"),
                                         grid.Column("", "", format: @<text><a href="javascript:void(0)" class="foodedit btn btn-warning btn-sm" , data-id="@item.FoodItemIDPK">Edit</a>
-                                                                             @Html.ActionLink("Remove", "FoodItemRemove", "Restaurant", new { @id = @item.FoodItemIDPK, @restaurantID = @item.RestaurantIDFK }, new { @class = "btn btn-danger btn-sm" })</text>)))
+                                                                             @Html.ActionLink("Remove", "FoodItemRemove", "Restaurant", new { @id = @item.FoodItemIDPK, @restaurantID = @item.RestaurantIDFK }, new { @class = "btn btn-danger btn-sm", onclick= "return confirm('Are you sure to remove this food item?');"  })</text>)))
                     </div>
                 </div>
 

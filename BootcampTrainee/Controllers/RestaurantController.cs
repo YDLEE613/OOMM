@@ -50,7 +50,7 @@
             int today = (int)DateTime.Now.DayOfWeek;
 
             // Check if it is the first order for the restaurant of the current user this week
-           /* bool AlreadyOrdered = lRestaurantBLL.FindOrderCountThisWeekByUserIDAndRestaurantID(lUserIDFK, id);
+            bool AlreadyOrdered = lRestaurantBLL.FindOrderCountThisWeekByUserIDAndRestaurantID(lUserIDFK, id);
 
             // The user already ordered, return to restaurant index page with message
             if (AlreadyOrdered)
@@ -62,18 +62,18 @@
             else if (lDayOfWeek != today)
             {
                 if (lDayOfWeek > today)
-                {
-                    // message for trying to order for future
-                    TempData["msg"] = "<script>alert('You cannot order today.');</script>";
-                }
-                else
-                {
-                    // message for past day
-                    TempData["msg"] = "<script>alert('You can order next week.');</script>";
-                }
+            {
+            // message for trying to order for future
+            TempData["msg"] = "<script>alert('You cannot order today.');</script>";
+            }
+            else
+            {
+            // message for past day
+            TempData["msg"] = "<script>alert('You can order next week.');</script>";
+            }
 
                 return RedirectToAction("Index", "Restaurant");
-            }*/
+            }
 
             // Instantiate FoodItemListUtil object
             FoodItemsListUtil lFoodItemsListUtil = new FoodItemsListUtil();

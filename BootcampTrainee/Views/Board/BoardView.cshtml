@@ -157,7 +157,7 @@
                 <!-- show the remove button to user with same id and admin/manager-->
                 @if (Model.Board.UserIDFK == CurrUserIDPK || AUTHRoles.Contains(CurrRole))
                 {
-                    @Html.ActionLink("Remove", "BoardRemove", new { @id = Model.Board.BoardIDPK }, new { @class = "btn btn-danger btn-sm" })
+                    @Html.ActionLink("Remove", "BoardRemove", new { @id = Model.Board.BoardIDPK }, new { @class = "btn btn-danger btn-sm", onclick= "return confirm('Are you sure to remove this post?');" })
                 }
                 <!-- button to list-->
                 @Html.ActionLink("Back to List", "BoardList", new { }, new { @class = "btn btn-warning btn-sm" })
@@ -251,7 +251,7 @@
                         <!-- remove button: showed only to user with same IDPK or to manager/admin-->
                         @if (CurrUserIDPK == @eachComment.UserIDFK || AUTHRoles.Contains(CurrRole))
                         {
-                            <td>@Html.ActionLink("Remove", "BoardCommentRemove", "BoardComment", new { @id = eachComment.BoardCommentIDPK, @boardID = @Model.Board.BoardIDPK }, new { @class = "btn btn-danger btn-sm" })</td>
+                            <td>@Html.ActionLink("Remove", "BoardCommentRemove", "BoardComment", new { @id = eachComment.BoardCommentIDPK, @boardID = @Model.Board.BoardIDPK }, new { @class = "btn btn-danger btn-sm", onclick= "return confirm('Are you sure to remove this comment?');" })</td>
 
                         }
 

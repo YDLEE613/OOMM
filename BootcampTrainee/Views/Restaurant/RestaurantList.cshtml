@@ -37,7 +37,7 @@
                                 grid.Column("AverageRating", "Score"),
                                 grid.Column("IsActive", "Status", format: @<text>@(item.IsActive == 1 ? @Html.Raw("<strong>Active</strong>") : @Html.Raw("Not Active"))</text>),
                                 grid.Column("", "", format:@<text>@Html.ActionLink("Detail", "RestaurantProfile", "Restaurant", new { id = @item.RestaurantIDPK }, new { @class = "btn btn-primary btn-sm" })
-                                                                      @Html.ActionLink("Remove", "RestaurantRemove", "Restaurant", new { id = @item.RestaurantIDPK }, new { @class = "btn btn-danger btn-sm" })</text>)))
+                                                                      @Html.ActionLink("Remove", "RestaurantRemove", "Restaurant", new { id = @item.RestaurantIDPK }, new { @class = "btn btn-danger btn-sm", onclick= "return confirm('Are you sure to remove this restaurant?');"  })</text>)))
                 }
                 else
                 {
